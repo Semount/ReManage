@@ -19,10 +19,5 @@ namespace ReManage
                 viewModel.PasswordProvider.Password = ((PasswordBox)sender).Password;
             }
         }
-
-        private void CloseCommand(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
     }
 }

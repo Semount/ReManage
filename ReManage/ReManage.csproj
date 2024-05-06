@@ -20,4 +20,8 @@
     <Folder Include="Models\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Npgsql" Version="8.0.2" />
+  </ItemGroup>
+
 </Project>

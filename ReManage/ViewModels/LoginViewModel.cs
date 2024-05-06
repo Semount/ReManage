@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Input;
+using Npgsql;
 using ReManage.Core;
 using ReManage.Views;
 
@@ -56,22 +58,45 @@ namespace ReManage.ViewModels
 
         private void LoginAction(object obj)
         {
-            // Здесь вы можете добавить код для проверки учетных данных
-            // Например:
-            if (Username == "admin" && PasswordProvider.Password == "123")
-            {
-                // Открытие нового окна после успешного входа
-                MainMenuWindow mainMenuWindow = new MainMenuWindow();
-                mainMenuWindow.Show();
+            string enteredLogin = Username;
+            string enteredPassword = PasswordProvider.Password;
 
-                // Закрытие текущего окна
-                var window = obj as Window;
-                window?.Close();
-            }
-            else
+            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
             {
-                // Выводим сообщение об ошибке при неверных учетных данных
-                MessageBox.Show("Неверный логин или пароль.");
+                connection.Open();
+
+                string query = "SELECT role_id FROM employees WHERE login = @Login AND password = @Password";
+                using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Login", enteredLogin);
+                    command.Parameters.AddWithValue("@Password", enteredPassword);
+
+                    object result = command.ExecuteScalar();
+                    if (result != null)
+                    {
+                        int roleId = Convert.ToInt32(result);
+                        switch (roleId)
+                        {
+                            case 1: // Официант
+                                // Открыть окно для официанта
+                                break;
+                            case 2: // Повар
+                                // Открыть окно для повара
+                                break;
+                            case 3: // Администратор
+                                // Открыть окно для администратора
+                                break;
+                            default:
+                                // Неизвестная роль
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        // Неверный логин или пароль
+                        MessageBox.Show("Неверный логин или пароль.");
+                    }
+                }
             }
         }
 
