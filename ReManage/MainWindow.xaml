@@ -1,0 +1,66 @@
+﻿<Window x:Class="ReManage.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModels="clr-namespace:ReManage.ViewModels"
+        xmlns:local="clr-namespace:ReManage.Core"
+        mc:Ignorable="d"
+        Title="ReManage: вход" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ReManage;component/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:PasswordProvider x:Key="PasswordProvider" />
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Window.DataContext>
+        <viewModels:LoginViewModel />
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Кнопка закрытия -->
+        <Button Grid.Row="0" HorizontalAlignment="Right" Margin="10" Padding="5" Style="{StaticResource ButtonStyle}">
+            <Button.CommandParameter>
+                <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}" />
+            </Button.CommandParameter>
+            <Button.Command>
+                <Binding Path="CloseCommand" />
+            </Button.Command>
+            <Path Data="M0,0 L1,1 M0,1 L1,0" Stroke="White" StrokeThickness="2" />
+        </Button>
+
+        <!-- Логотип -->
+        <Image Grid.Row="1" Source="/ReManage;component/Resources/logo.png" HorizontalAlignment="Center"/>
+
+        <!-- Поля ввода -->
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Width="300">
+            <TextBlock Text="Вход в систему" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20" />
+            <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" 
+             FontSize="16" FontWeight="Medium"
+             Style="{StaticResource TextBoxStyle}" />
+            <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10" FontSize="16" FontWeight="Medium"
+                 Style="{StaticResource PasswordBoxStyle}"
+                 PasswordChanged="PasswordBox_PasswordChanged" />
+
+            <Button Command="{Binding LoginCommand}" Content="Войти" 
+            FontSize="16" FontWeight="Bold"
+            Style="{StaticResource ButtonStyle}" />
+        </StackPanel>
+
+        <!-- Нижняя панель -->
+        <Grid Grid.Row="3">
+            <TextBlock Text="© Антипенко Сергей, 2024" VerticalAlignment="Bottom" HorizontalAlignment="Center" />
+        </Grid>
+    </Grid>
+</Window>
