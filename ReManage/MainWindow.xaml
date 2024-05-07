@@ -6,7 +6,8 @@
         xmlns:viewModels="clr-namespace:ReManage.ViewModels"
         xmlns:local="clr-namespace:ReManage.Core"
         mc:Ignorable="d"
-        Title="ReManage: вход" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize">
+        Title="ReManage: вход" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize"
+        KeyDown="Window_KeyDown">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -22,12 +23,15 @@
         <viewModels:LoginViewModel />
     </Window.DataContext>
 
+
+    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
@@ -48,12 +52,16 @@
         <!-- Поля ввода -->
         <StackPanel Grid.Row="2" HorizontalAlignment="Center" Width="300">
             <TextBlock Text="Вход в систему" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20" />
-            <TextBox Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" 
+            <TextBox x:Name="UsernameBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" 
              FontSize="16" FontWeight="Medium"
              Style="{StaticResource TextBoxStyle}" />
             <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10" FontSize="16" FontWeight="Medium"
                  Style="{StaticResource PasswordBoxStyle}"
-                 PasswordChanged="PasswordBox_PasswordChanged" />
+                 PasswordChanged="PasswordBox_PasswordChanged">
+                <PasswordBox.RenderTransform>
+                    <ScaleTransform />
+                </PasswordBox.RenderTransform>
+            </PasswordBox>
 
             <Button Command="{Binding LoginCommand}" Content="Войти" 
             FontSize="16" FontWeight="Bold"
@@ -68,4 +76,5 @@
             <TextBlock Text="© Антипенко Сергей, 2024" VerticalAlignment="Bottom" HorizontalAlignment="Center" />
         </Grid>
     </Grid>
+    
 </Window>

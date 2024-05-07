@@ -7,10 +7,30 @@
         xmlns:local="clr-namespace:ReManage.Views"
         mc:Ignorable="d"
         Title="WaiterWindow" Height="450" Width="800">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ReManage;component/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Window.DataContext>
         <viewModels:WaiterViewModel/>
     </Window.DataContext>
     <Grid>
-        
+        <TabControl SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
+            SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Header="Orders">
+                <!-- Содержимое вкладки "Заказы" -->
+            </TabItem>
+            <TabItem Header="Menu">
+                <!-- Содержимое вкладки "Меню" -->
+            </TabItem>
+            <TabItem Header="Settings">
+                <!-- Содержимое вкладки "Настройки" -->
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

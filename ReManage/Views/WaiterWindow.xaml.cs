@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ReManage.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,13 @@ namespace ReManage.Views
         public WaiterWindow()
         {
             InitializeComponent();
+        }
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (DataContext is WaiterViewModel viewModel)
+            {
+                viewModel.TabSelectionChangedCommand.Execute(((TabControl)sender).SelectedIndex);
+            }
         }
     }
 }
