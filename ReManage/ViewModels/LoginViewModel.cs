@@ -52,8 +52,29 @@ namespace ReManage.ViewModels
         }
         private bool CanLogin(object arg)
         {
-            // Добавьте здесь логику для проверки возможности входа
             return !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(PasswordProvider?.Password);
+        }
+
+        private bool _showErrorMessage;
+        public bool ShowErrorMessage
+        {
+            get { return _showErrorMessage; }
+            set
+            {
+                _showErrorMessage = value;
+                OnPropertyChanged(nameof(ShowErrorMessage));
+            }
+        }
+
+        private string _errorMessage;
+        public string ErrorMessage
+        {
+            get { return _errorMessage; }
+            set
+            {
+                _errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
+            }
         }
 
         private void LoginAction(object obj)
@@ -78,27 +99,43 @@ namespace ReManage.ViewModels
                         switch (roleId)
                         {
                             case 1: // Официант
-                                // Открыть окно для официанта
+                                WaiterWindow waiterWindow = new WaiterWindow();
+                                waiterWindow.DataContext = new WaiterViewModel();
+                                waiterWindow.Show();
                                 break;
                             case 2: // Повар
-                                // Открыть окно для повара
+                                ChefWindow chefWindow = new ChefWindow();
+                                chefWindow.DataContext = new ChefViewModel();
+                                chefWindow.Show();
                                 break;
                             case 3: // Администратор
-                                // Открыть окно для администратора
+                                AdminWindow adminWindow = new AdminWindow();
+                                adminWindow.DataContext = new AdminViewModel();
+                                adminWindow.Show();
                                 break;
                             default:
                                 // Неизвестная роль
+                                ShowErrorMessage = true;
+                                ErrorMessage = "Неизвестная роль. Доложите администратору.";
                                 break;
+                        }
+                        // Закрываем текущее окно входа
+                        if (obj is Window window)
+                        {
+                            window.Close();
                         }
                     }
                     else
                     {
                         // Неверный логин или пароль
-                        MessageBox.Show("Неверный логин или пароль.");
+                        ShowErrorMessage = true;
+                        ErrorMessage = "Неверный логин или пароль.";
                     }
                 }
             }
         }
+
+        
 
         private ICommand _closeCommand;
         public ICommand CloseCommand
