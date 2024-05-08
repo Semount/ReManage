@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ReManage.ViewModels;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using ReManage.UserControlData;
+using ReManage.Core;
 
 namespace ReManage.Views
 {
-    /// <summary>
-    /// Interaction logic for AdminWindow.xaml
-    /// </summary>
     public partial class AdminWindow : Window
     {
-        public AdminWindow()
+        public AdminWindow(string name, string surname)
         {
             InitializeComponent();
+            DataContext = new AdminViewModel(name, surname);
+        }
+
+        private void SideMenuUserControl_SelectedMenuItemChanged(object sender, SideMenuUserControl.SelectedMenuItemEventArgs e)
+        {
+            var viewModel = DataContext as AdminViewModel;
+            if (viewModel != null)
+                viewModel.SelectedNavigationItem = new NavigationItem(e.Title, e.Icon, e.ContentType);
         }
     }
 }

@@ -86,56 +86,65 @@ namespace ReManage.ViewModels
             {
                 connection.Open();
 
-                string query = "SELECT role_id FROM employees WHERE login = @Login AND password = @Password";
+                string query = "SELECT role_id, name, surname FROM employees WHERE login = @Login AND password = @Password";
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Login", enteredLogin);
                     command.Parameters.AddWithValue("@Password", enteredPassword);
 
-                    object result = command.ExecuteScalar();
-                    if (result != null)
+                    using (var reader = command.ExecuteReader())
                     {
-                        int roleId = Convert.ToInt32(result);
-                        switch (roleId)
+                        if (reader.Read())
                         {
-                            case 1: // Официант
-                                WaiterWindow waiterWindow = new WaiterWindow();
-                                waiterWindow.DataContext = new WaiterViewModel();
-                                waiterWindow.Show();
-                                break;
-                            case 2: // Повар
-                                ChefWindow chefWindow = new ChefWindow();
-                                chefWindow.DataContext = new ChefViewModel();
-                                chefWindow.Show();
-                                break;
-                            case 3: // Администратор
-                                AdminWindow adminWindow = new AdminWindow();
-                                adminWindow.DataContext = new AdminViewModel();
-                                adminWindow.Show();
-                                break;
-                            default:
-                                // Неизвестная роль
-                                ShowErrorMessage = true;
-                                ErrorMessage = "Неизвестная роль. Доложите администратору.";
-                                break;
+                            int roleId = reader.GetInt32(0);
+                            string name = reader.GetString(1);
+                            string surname = reader.GetString(2);
+
+                            switch (roleId)
+                            {
+                                case 1: // Официант
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        WaiterWindow waiterWindow = new WaiterWindow(name, surname);
+                                        waiterWindow.Show();
+                                    });
+                                    break;
+                                case 2: // Повар
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        ChefWindow chefWindow = new ChefWindow(name, surname);
+                                        chefWindow.Show();
+                                    });
+                                    break;
+                                case 3: // Администратор
+                                    Application.Current.Dispatcher.Invoke(() =>
+                                    {
+                                        AdminWindow adminWindow = new AdminWindow(name, surname);
+                                        adminWindow.Show();
+                                    });
+                                    break;
+                                default:
+                                    // Неизвестная роль
+                                    ShowErrorMessage = true;
+                                    ErrorMessage = "Неизвестная роль. Доложите администратору.";
+                                    break;
+                            }
+                            // Закрываем текущее окно входа
+                            if (obj is Window window)
+                            {
+                                window.Close();
+                            }
                         }
-                        // Закрываем текущее окно входа
-                        if (obj is Window window)
+                        else
                         {
-                            window.Close();
+                            // Неверный логин или пароль
+                            ShowErrorMessage = true;
+                            ErrorMessage = "Неверный логин или пароль.";
                         }
-                    }
-                    else
-                    {
-                        // Неверный логин или пароль
-                        ShowErrorMessage = true;
-                        ErrorMessage = "Неверный логин или пароль.";
                     }
                 }
             }
         }
-
-        
 
         private ICommand _closeCommand;
         public ICommand CloseCommand

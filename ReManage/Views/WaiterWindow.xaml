@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="clr-namespace:ReManage.ViewModels"
-        xmlns:local="clr-namespace:ReManage.Views"
+        xmlns:local="clr-namespace:ReManage.UserControlData"
         mc:Ignorable="d"
-        Title="WaiterWindow" Height="450" Width="800">
+        Title="WaiterWindow" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -16,21 +15,26 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Window.DataContext>
-        <viewModels:WaiterViewModel/>
-    </Window.DataContext>
     <Grid>
-        <TabControl SelectedIndex="{Binding SelectedTabIndex, Mode=TwoWay}"
-            SelectionChanged="TabControl_SelectionChanged">
-            <TabItem Header="Orders">
-                <!-- Содержимое вкладки "Заказы" -->
-            </TabItem>
-            <TabItem Header="Menu">
-                <!-- Содержимое вкладки "Меню" -->
-            </TabItem>
-            <TabItem Header="Settings">
-                <!-- Содержимое вкладки "Настройки" -->
-            </TabItem>
-        </TabControl>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Content="X" HorizontalAlignment="Right" VerticalAlignment="Top" Width="30" Height="30"
+            Style="{StaticResource ButtonStyle}" Margin="10,10,10,0"
+            Command="{Binding CloseCommand}"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <local:SideMenuUserControl Grid.Column="0"
+                                       DataContext="{Binding}"
+                                       SelectedMenuItemChanged="SideMenuUserControl_SelectedMenuItemChanged" />
+            <ContentControl Grid.Column="1" Content="{Binding CurrentContent}" />
+        </Grid>
     </Grid>
 </Window>

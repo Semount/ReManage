@@ -1,43 +1,68 @@
 ﻿using ReManage.Core;
+using ReManage.UserControlData;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
-namespace ReManage.ViewModels
+public class WaiterViewModel : ViewModelBase
 {
-    internal class WaiterViewModel : ViewModelBase
+    private NavigationItem _selectedNavigationItem;
+    public NavigationItem SelectedNavigationItem
     {
-        private int _selectedTabIndex;
-        public int SelectedTabIndex
+        get { return _selectedNavigationItem; }
+        set
         {
-            get { return _selectedTabIndex; }
-            set
+            if (SetProperty(ref _selectedNavigationItem, value))
             {
-                _selectedTabIndex = value;
-                OnPropertyChanged(nameof(SelectedTabIndex));
+                // Загрузите соответствующее содержимое
+                CurrentContent = Activator.CreateInstance(value.ContentType);
             }
         }
+    }
 
-        private ICommand _tabSelectionChangedCommand;
-        public ICommand TabSelectionChangedCommand
-        {
-            get
-            {
-                if (_tabSelectionChangedCommand == null)
-                {
-                    _tabSelectionChangedCommand = new RelayCommand<int>(OnTabSelectionChanged);
-                }
-                return _tabSelectionChangedCommand;
-            }
-        }
+    private object _currentContent;
+    public object CurrentContent
+    {
+        get { return _currentContent; }
+        set { SetProperty(ref _currentContent, value); }
+    }
 
-        private void OnTabSelectionChanged(int tabIndex)
+    public ICommand CloseCommand { get; }
+
+    public ObservableCollection<NavigationItem> SideMenuItems { get; } = new ObservableCollection<NavigationItem>();
+
+    public WaiterViewModel(string name, string surname)
+    {
+        CloseCommand = new RelayCommand(_ => CloseWindow());
+
+        InitializeSideMenuItems();
+
+        // Установка приветственного сообщения, если не выбрана ни одна вкладка
+        if (CurrentContent == null)
         {
-            SelectedTabIndex = tabIndex;
-            // Здесь можно выполнить дополнительные действия при переключении вкладок
+            CurrentContent = $"Здравствуйте, {name} {surname}.\nПожалуйста, воспользуйтесь навигационным меню слева для начала работы.";
         }
+    }
+
+    private void CloseWindow()
+    {
+        Application.Current.Windows
+            .OfType<Window>()
+            .SingleOrDefault(w => w.IsActive)?
+            .Close();
+    }
+
+    private void InitializeSideMenuItems()
+    {
+        // Загрузка иконок
+        ImageSource tableViewIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/Tables.png"));
+        ImageSource orderIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/Order.png"));
+
+        SideMenuItems.Add(new NavigationItem("Графическое представление", tableViewIcon, typeof(UserControlGraphicRestaurant)));
+        SideMenuItems.Add(new NavigationItem("Список заказов", orderIcon, typeof(UserControlOrders)));
     }
 }

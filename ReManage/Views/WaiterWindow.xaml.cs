@@ -1,35 +1,28 @@
 ﻿using ReManage.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using ReManage.UserControlData;
+using ReManage.Core;
 
 namespace ReManage.Views
 {
-    /// <summary>
-    /// Interaction logic for WaiterWindow.xaml
-    /// </summary>
     public partial class WaiterWindow : Window
     {
-        public WaiterWindow()
+        private WaiterViewModel _waiterViewModel;
+
+        // Изменение конструктора для принятия name и surname
+        public WaiterWindow(string name, string surname)
         {
             InitializeComponent();
+
+            // Передаем name и surname в ViewModel
+            _waiterViewModel = new WaiterViewModel(name, surname);
+            DataContext = _waiterViewModel;
         }
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+
+        private void SideMenuUserControl_SelectedMenuItemChanged(object sender, SideMenuUserControl.SelectedMenuItemEventArgs e)
         {
-            if (DataContext is WaiterViewModel viewModel)
-            {
-                viewModel.TabSelectionChangedCommand.Execute(((TabControl)sender).SelectedIndex);
-            }
+            // Обработайте выбор вкладки
+            _waiterViewModel.SelectedNavigationItem = new NavigationItem(e.Title, e.Icon, e.ContentType);
         }
     }
 }
