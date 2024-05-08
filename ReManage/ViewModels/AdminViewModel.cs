@@ -57,8 +57,8 @@ public class AdminViewModel : ViewModelBase
 
     private void InitializeSideMenuItems()
     {
-        ImageSource restaurantOverviewIcon = new BitmapImage(new Uri("pack://application:,,,/PathToYourIcon/placeholder.png"));
-        ImageSource overviewIcon = new BitmapImage(new Uri("pack://application:,,,/PathToYourIcon/placeholder.png"));
+        ImageSource restaurantOverviewIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/RestaurantOverview.png"));
+        ImageSource overviewIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/Overview.png"));
 
         SideMenuItems.Add(new NavigationItem("Обзор ресторана", restaurantOverviewIcon, typeof(UserControlAdminRestaurantOverlay)));
         SideMenuItems.Add(new NavigationItem("Сводка", overviewIcon, typeof(UserControlAdminOverview)));

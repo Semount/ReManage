@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:ReManage.Core"
         mc:Ignorable="d"
         Title="ReManage: вход" WindowState="Maximized" WindowStyle="None" ResizeMode="NoResize"
+        Icon="Resources/AppIcon.ico"
         KeyDown="Window_KeyDown">
 
     <Window.Resources>
@@ -23,20 +24,9 @@
         <viewModels:LoginViewModel />
     </Window.DataContext>
 
-
-    
-
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-
-        <!-- Кнопка закрытия -->
-        <Button Grid.Row="0" HorizontalAlignment="Right" Margin="10" Padding="5" Style="{StaticResource ButtonStyle}">
+        <!-- Кнопка закрытия, остаётся без масштабирования -->
+        <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Padding="5" Style="{StaticResource ButtonStyle}" Width="25" Height="25">
             <Button.CommandParameter>
                 <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}" />
             </Button.CommandParameter>
@@ -46,35 +36,50 @@
             <Path Data="M0,0 L1,1 M0,1 L1,0" Stroke="White" StrokeThickness="2" />
         </Button>
 
-        <!-- Логотип -->
-        <Image Grid.Row="1" Source="/ReManage;component/Resources/logo.png" HorizontalAlignment="Center"/>
+        <!-- Основной контент с масштабированием -->
+        <Grid Margin="20">
+            <Grid.LayoutTransform>
+                <!-- Увеличиваем масштаб всех элементов в 1.5 раза -->
+                <ScaleTransform ScaleX="1.3" ScaleY="1.3" />
+            </Grid.LayoutTransform>
 
-        <!-- Поля ввода -->
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" Width="300">
-            <TextBlock Text="Вход в систему" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20" />
-            <TextBox x:Name="UsernameBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" 
-             FontSize="16" FontWeight="Medium"
-             Style="{StaticResource TextBoxStyle}" />
-            <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10" FontSize="16" FontWeight="Medium"
-                 Style="{StaticResource PasswordBoxStyle}"
-                 PasswordChanged="PasswordBox_PasswordChanged">
-                <PasswordBox.RenderTransform>
-                    <ScaleTransform />
-                </PasswordBox.RenderTransform>
-            </PasswordBox>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
 
-            <Button Command="{Binding LoginCommand}" Content="Войти" 
-            FontSize="16" FontWeight="Bold"
-            Style="{StaticResource ButtonStyle}" />
-        </StackPanel>
+            <!-- Логотип -->
+            <Image Grid.Row="1" Source="/ReManage;component/Resources/logo.png" HorizontalAlignment="Center"/>
 
-        <!-- Ошибка -->
-        <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center" Visibility="{Binding ShowErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}" />
-        
-        <!-- Нижняя панель -->
-        <Grid Grid.Row="4">
-            <TextBlock Text="© Антипенко Сергей, 2024" VerticalAlignment="Bottom" HorizontalAlignment="Center" />
+            <!-- Поля ввода -->
+            <StackPanel Grid.Row="2" HorizontalAlignment="Center" Width="300">
+                <TextBlock Text="Вход в систему" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20" />
+                <TextBox x:Name="UsernameBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" 
+                 FontSize="16" FontWeight="Medium"
+                 Style="{StaticResource TextBoxStyle}" />
+                <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10" FontSize="16" FontWeight="Medium"
+                     Style="{StaticResource PasswordBoxStyle}"
+                     PasswordChanged="PasswordBox_PasswordChanged">
+                    <PasswordBox.RenderTransform>
+                        <ScaleTransform />
+                    </PasswordBox.RenderTransform>
+                </PasswordBox>
+
+                <Button Command="{Binding LoginCommand}" Content="Войти" 
+                FontSize="16" FontWeight="Bold"
+                Style="{StaticResource ButtonStyle}" />
+            </StackPanel>
+
+            <!-- Ошибка -->
+            <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center" Visibility="{Binding ShowErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}" />
+
+            <!-- Нижняя панель -->
+            <Grid Grid.Row="4">
+                <TextBlock Text="© Антипенко Сергей, 2024" VerticalAlignment="Bottom" HorizontalAlignment="Center" />
+            </Grid>
         </Grid>
     </Grid>
-    
 </Window>

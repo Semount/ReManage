@@ -19,7 +19,14 @@
     </UserControl.Resources>
 
     <Grid>
-        <ListView x:Name="sideMenuListView" ItemsSource="{Binding SideMenuItems}"
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Основные пункты меню -->
+        <ListView x:Name="sideMenuListView" Grid.Row="0"
+                  ItemsSource="{Binding SideMenuItems}"
                   SelectedItem="{Binding SelectedNavigationItem, Mode=TwoWay}"
                   Style="{StaticResource ListViewStyle}">
             <ListView.ItemContainerStyle>
@@ -34,5 +41,13 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+
+        <!-- Кнопка "Выход" -->
+        <Button x:Name="logoutButton" Grid.Row="1" Margin="10" Height="40" VerticalAlignment="Bottom" Style="{StaticResource ButtonStyle}">
+            <StackPanel Orientation="Horizontal">
+                <Image Source="pack://application:,,,/Resources/Icons/Logout.png" Width="20" Height="20" />
+                <TextBlock Text="Выход из аккаунта" Margin="10,0,0,0" VerticalAlignment="Center" />
+            </StackPanel>
+        </Button>
     </Grid>
 </UserControl>
