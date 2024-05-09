@@ -86,7 +86,7 @@ namespace ReManage.ViewModels
             {
                 connection.Open();
 
-                string query = "SELECT role_id, name, surname FROM employees WHERE login = @Login AND password = @Password";
+                string query = "SELECT role_id, name, surname FROM employees WHERE Login = @Login AND password = @Password";
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Login", enteredLogin);

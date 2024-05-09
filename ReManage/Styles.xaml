@@ -54,6 +54,28 @@
         </Style.Triggers>
     </Style>
 
+    <!-- Стиль кнопок администратора -->
+    <Style x:Key="AdminButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="Padding" Value="12,8" />
+        <Setter Property="Margin" Value="5,0,10,0" />
+        <Setter Property="Background" Value="#007BFF" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Style.Resources>
+            <Style TargetType="Border">
+                <Setter Property="CornerRadius" Value="10" />
+            </Style>
+        </Style.Resources>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#0056b3" />
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="#004085" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- Стиль для ListView, используемого в боковой панели -->
     <Style x:Key="ListViewStyle" TargetType="ListView">
         <Setter Property="Background" Value="#F7F7F7"/>

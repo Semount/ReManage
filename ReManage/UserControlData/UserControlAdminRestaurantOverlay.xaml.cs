@@ -1,28 +1,67 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ReManage.UserControlData
 {
-    /// <summary>
-    /// Interaction logic for UserControlAdminRestaurantOverlay.xaml
-    /// </summary>
     public partial class UserControlAdminRestaurantOverlay : UserControl
     {
+        private bool isDragging;
+        private Point mouseOffset;
+
         public UserControlAdminRestaurantOverlay()
         {
             InitializeComponent();
+            DataContext = new RestaurantViewModel();
+        }
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var border = sender as Border;
+            if (border != null)
+            {
+                isDragging = true;
+                var mousePosition = e.GetPosition(border);
+                mouseOffset = new Point(mousePosition.X, mousePosition.Y);
+                border.CaptureMouse();
+            }
+        }
+
+        private void Border_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isDragging && sender is Border border && border.DataContext is TableModel table)
+            {
+                var mousePosition = e.GetPosition(canvas);
+
+                // Вычисляем новые координаты с учетом смещения мыши
+                double newX = mousePosition.X - mouseOffset.X;
+                double newY = mousePosition.Y - mouseOffset.Y;
+
+                // Ограничиваем координаты, чтобы не выходить за пределы Canvas
+                newX = Clamp(newX, 0, canvas.ActualWidth - border.Width);
+                newY = Clamp(newY, 0, canvas.ActualHeight - border.Height);
+
+                table.X = newX;
+                table.Y = newY;
+            }
+        }
+
+        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (isDragging && sender is Border border && border.DataContext is TableModel table)
+            {
+                isDragging = false;
+                border.ReleaseMouseCapture();
+
+                // Финальное выравнивание при отпускании кнопки мыши
+                table.X = table.SnapToGrid(table.X);
+                table.Y = table.SnapToGrid(table.Y);
+            }
+        }
+
+        private double Clamp(double value, double min, double max)
+        {
+            return value < min ? min : (value > max ? max : value);
         }
     }
 }

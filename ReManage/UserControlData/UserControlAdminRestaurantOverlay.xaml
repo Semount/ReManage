@@ -1,11 +1,69 @@
 ﻿<UserControl x:Class="ReManage.UserControlData.UserControlAdminRestaurantOverlay"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="400">
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:ReManage.UserControlData"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ReManage;component/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <local:GridLineConverter x:Key="GridLineConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid>
-        <TextBlock Text="Обзор ресторана" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Canvas x:Name="canvas">
+            <Path Stroke="LightGray" StrokeThickness="0.5" Opacity="0.5">
+                <Path.Data>
+                    <MultiBinding Converter="{StaticResource GridLineConverter}" ConverterParameter="Horizontal">
+                        <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Canvas}"/>
+                        <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=Canvas}"/>
+                    </MultiBinding>
+                </Path.Data>
+            </Path>
+            <Path Stroke="LightGray" StrokeThickness="0.5" Opacity="0.5">
+                <Path.Data>
+                    <MultiBinding Converter="{StaticResource GridLineConverter}" ConverterParameter="Vertical">
+                        <Binding Path="ActualWidth" RelativeSource="{RelativeSource AncestorType=Canvas}"/>
+                        <Binding Path="ActualHeight" RelativeSource="{RelativeSource AncestorType=Canvas}"/>
+                    </MultiBinding>
+                </Path.Data>
+            </Path>
+            <ItemsControl x:Name="itemsControl" ItemsSource="{Binding Tables}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas IsItemsHost="True"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Width="{Binding Width}" Height="{Binding Height}" Background="DarkCyan" BorderBrush="Black" BorderThickness="1"
+                                MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseMove="Border_MouseMove" MouseLeftButtonUp="Border_MouseLeftButtonUp">
+                            <Border.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Удалить стол"
+                                              Command="{Binding RemoveCommand}"
+                                              CommandParameter="{Binding}" />
+                                </ContextMenu>
+                            </Border.ContextMenu>
+                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="Canvas.Left" Value="{Binding X, Mode=TwoWay}"/>
+                        <Setter Property="Canvas.Top" Value="{Binding Y, Mode=TwoWay}"/>
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+            </ItemsControl>
+        </Canvas>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10">
+            <Button Content="Добавить стол" Command="{Binding AddTableCommand}" Style="{StaticResource AdminButtonStyle}" Margin="0,0,10,0"/>
+            <Button Content="Сохранить расположение" Command="{Binding SaveLayoutCommand}" Style="{StaticResource AdminButtonStyle}" Margin="0,0,10,0"/>
+            <Button Content="Загрузить расположение" Command="{Binding LoadLayoutCommand}" Style="{StaticResource AdminButtonStyle}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
