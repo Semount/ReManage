@@ -8,11 +8,13 @@ namespace ReManage.UserControlData
     {
         private bool isDragging;
         private Point mouseOffset;
+        private RestaurantViewModel viewModel;
 
         public UserControlAdminRestaurantOverlay()
         {
             InitializeComponent();
-            DataContext = new RestaurantViewModel();
+            viewModel = new RestaurantViewModel();
+            DataContext = viewModel;
         }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -41,8 +43,12 @@ namespace ReManage.UserControlData
                 newX = Clamp(newX, 0, canvas.ActualWidth - border.Width);
                 newY = Clamp(newY, 0, canvas.ActualHeight - border.Height);
 
-                table.X = newX;
-                table.Y = newY;
+                // Проверка на пересечение
+                if (!viewModel.CheckForCollision(table, newX, newY))
+                {
+                    table.X = newX;
+                    table.Y = newY;
+                }
             }
         }
 

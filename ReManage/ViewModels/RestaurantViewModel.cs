@@ -1,9 +1,10 @@
-﻿using ReManage.Core;
+﻿using Newtonsoft.Json;
+using ReManage.Core;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Windows.Input;
-using Newtonsoft.Json;
+using System.Windows;
 
 public class RestaurantViewModel : INotifyPropertyChanged
 {
@@ -30,7 +31,8 @@ public class RestaurantViewModel : INotifyPropertyChanged
 
     private void AddTable()
     {
-        Tables.Add(new TableModel { X = 50, Y = 50 });
+        var newTable = new TableModel { X = 50, Y = 50 };
+        Tables.Add(newTable);
     }
 
     private void RemoveTable(TableModel table)
@@ -83,6 +85,24 @@ public class RestaurantViewModel : INotifyPropertyChanged
             // Обработка ошибок парсинга JSON
             System.Diagnostics.Debug.WriteLine($"Ошибка при разборе JSON: {ex.Message}");
         }
+    }
+
+    public bool CheckForCollision(TableModel table, double newX, double newY)
+    {
+        var tableRect = new Rect(newX, newY, table.Width, table.Height);
+
+        foreach (var otherTable in Tables)
+        {
+            if (otherTable == table) continue;
+
+            var otherRect = new Rect(otherTable.X, otherTable.Y, otherTable.Width, otherTable.Height);
+            if (tableRect.IntersectsWith(otherRect))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public event PropertyChangedEventHandler PropertyChanged;
