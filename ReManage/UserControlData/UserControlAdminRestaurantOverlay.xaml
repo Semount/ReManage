@@ -48,7 +48,7 @@
                                               CommandParameter="{Binding}" />
                                 </ContextMenu>
                             </Border.ContextMenu>
-                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="{Binding Number}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

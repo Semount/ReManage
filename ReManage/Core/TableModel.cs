@@ -10,16 +10,7 @@ public class TableModel : INotifyPropertyChanged
     private int _height = 150;
     public const int GridSize = 75;
 
-    private string name;
-    public string Name
-    {
-        get => name;
-        set
-        {
-            name = value;
-            OnPropertyChanged(nameof(Name));
-        }
-    }
+    // Удалено поле Name
 
     private int _number;
     public int Number
@@ -52,7 +43,6 @@ public class TableModel : INotifyPropertyChanged
         }
     }
 
-    // Публичный метод для выравнивания координаты по сетке
     public double SnapToGrid(double coordinate)
     {
         return Math.Round(coordinate / GridSize) * GridSize;
@@ -88,7 +78,6 @@ public class TableModel : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 
-    // Метод для глубокого копирования объектов
     public TableModel Clone()
     {
         return new TableModel
@@ -97,7 +86,6 @@ public class TableModel : INotifyPropertyChanged
             Y = this.Y,
             Width = this.Width,
             Height = this.Height,
-            Name = this.Name,
             Number = this.Number,
             RemoveCommand = this.RemoveCommand
         };

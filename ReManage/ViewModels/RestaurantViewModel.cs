@@ -3,6 +3,7 @@ using ReManage.Core;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Windows.Input;
 using System.Windows;
 
@@ -25,13 +26,15 @@ public class RestaurantViewModel : INotifyPropertyChanged
         SaveLayoutCommand = new RelayCommand(_ => SaveLayout());
         LoadLayoutCommand = new RelayCommand(_ => LoadLayout());
 
-        // Загружаем расположение при инициализации
         LoadLayout();
     }
 
     private void AddTable()
     {
-        var newTable = new TableModel { X = 50, Y = 50 };
+        // Находим минимальный свободный номер для нового стола
+        var newTableNumber = GetNextTableNumber();
+        var newTable = new TableModel { X = 50, Y = 50, Number = newTableNumber };
+        newTable.RemoveCommand = RemoveTableCommand;
         Tables.Add(newTable);
     }
 
@@ -47,12 +50,12 @@ public class RestaurantViewModel : INotifyPropertyChanged
     {
         try
         {
-            var json = JsonConvert.SerializeObject(Tables, Formatting.Indented);
+            var settings = new JsonSerializerSettings { ContractResolver = new ShouldSerializeContractResolver() };
+            var json = JsonConvert.SerializeObject(Tables, Formatting.Indented, settings);
             File.WriteAllText(SaveFilePath, json);
         }
         catch (IOException ex)
         {
-            // Обработка ошибок ввода/вывода
             System.Diagnostics.Debug.WriteLine($"Ошибка при сохранении макета: {ex.Message}");
         }
     }
@@ -70,6 +73,7 @@ public class RestaurantViewModel : INotifyPropertyChanged
                     Tables.Clear();
                     foreach (var table in tables)
                     {
+                        table.RemoveCommand = RemoveTableCommand;
                         Tables.Add(table);
                     }
                 }
@@ -77,31 +81,46 @@ public class RestaurantViewModel : INotifyPropertyChanged
         }
         catch (IOException ex)
         {
-            // Обработка ошибок ввода/вывода
             System.Diagnostics.Debug.WriteLine($"Ошибка при загрузке макета: {ex.Message}");
         }
         catch (JsonException ex)
         {
-            // Обработка ошибок парсинга JSON
             System.Diagnostics.Debug.WriteLine($"Ошибка при разборе JSON: {ex.Message}");
         }
+    }
+
+    private int GetNextTableNumber()
+    {
+        // Если нет столов, начинаем с 1
+        if (!Tables.Any())
+            return 1;
+
+        var existingNumbers = Tables.Select(t => t.Number).OrderBy(x => x).ToList();
+
+        // Находим минимальный пропущенный номер
+        int expectedNumber = 1;
+        foreach (var num in existingNumbers)
+        {
+            if (num != expectedNumber)
+                break;
+            expectedNumber++;
+        }
+
+        return expectedNumber;
     }
 
     public bool CheckForCollision(TableModel table, double newX, double newY)
     {
         var tableRect = new Rect(newX, newY, table.Width, table.Height);
-
         foreach (var otherTable in Tables)
         {
             if (otherTable == table) continue;
-
             var otherRect = new Rect(otherTable.X, otherTable.Y, otherTable.Width, otherTable.Height);
             if (tableRect.IntersectsWith(otherRect))
             {
                 return true;
             }
         }
-
         return false;
     }
 

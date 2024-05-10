@@ -1,8 +1,8 @@
 ﻿<UserControl x:Class="ReManage.UserControlData.UserControlGraphicRestaurant"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ReManage.UserControlData"
              mc:Ignorable="d">
     <Grid>
@@ -16,7 +16,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Border Width="{Binding Width}" Height="{Binding Height}" Background="DarkCyan" BorderBrush="Black" BorderThickness="1">
-                            <TextBlock Text="Стол" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="{Binding Number, StringFormat='Стол {0}'}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
