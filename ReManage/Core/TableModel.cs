@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using System;
+﻿using System;
+using System.ComponentModel;
 using System.Windows.Input;
 
 public class TableModel : INotifyPropertyChanged
@@ -9,8 +9,6 @@ public class TableModel : INotifyPropertyChanged
     private int _width = 150;
     private int _height = 150;
     public const int GridSize = 75;
-
-    // Удалено поле Name
 
     private int _number;
     public int Number
@@ -51,13 +49,21 @@ public class TableModel : INotifyPropertyChanged
     public int Width
     {
         get { return _width; }
-        set { _width = value; OnPropertyChanged(nameof(Width)); }
+        set
+        {
+            _width = value;
+            OnPropertyChanged(nameof(Width));
+        }
     }
 
     public int Height
     {
         get { return _height; }
-        set { _height = value; OnPropertyChanged(nameof(Height)); }
+        set
+        {
+            _height = value;
+            OnPropertyChanged(nameof(Height));
+        }
     }
 
     private ICommand _removeCommand;

@@ -86,7 +86,7 @@ namespace ReManage.ViewModels
             {
                 connection.Open();
 
-                string query = "SELECT role_id, name, surname FROM employees WHERE Login = @Login AND password = @Password";
+                string query = "SELECT role_id, name, surname FROM employees WHERE login = @Login AND password = @Password";
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("@Login", enteredLogin);
@@ -96,6 +96,7 @@ namespace ReManage.ViewModels
                     {
                         if (reader.Read())
                         {
+                            int employeeId = reader.GetInt32(0);
                             int roleId = reader.GetInt32(0);
                             string name = reader.GetString(1);
                             string surname = reader.GetString(2);
@@ -105,7 +106,7 @@ namespace ReManage.ViewModels
                                 case 1: // Официант
                                     Application.Current.Dispatcher.Invoke(() =>
                                     {
-                                        WaiterWindow waiterWindow = new WaiterWindow(name, surname);
+                                        WaiterWindow waiterWindow = new WaiterWindow(employeeId, name, surname);
                                         waiterWindow.Show();
                                     });
                                     break;

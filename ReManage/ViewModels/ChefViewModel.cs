@@ -60,7 +60,7 @@ public class ChefViewModel : ViewModelBase
         ImageSource ordersIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/Order.png"));
         ImageSource currentOrderIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/CurrentOrder.png"));
 
-        SideMenuItems.Add(new NavigationItem("Все заказы", ordersIcon, typeof(UserControlChefOrders)));
-        SideMenuItems.Add(new NavigationItem("Текущий заказ", currentOrderIcon, typeof(UserControlChefCurrentOrder)));
+        SideMenuItems.Add(new NavigationItem("Все заказы", ordersIcon, typeof(ChefOrders)));
+        SideMenuItems.Add(new NavigationItem("Текущий заказ", currentOrderIcon, typeof(ChefCurrentOrder)));
     }
 }

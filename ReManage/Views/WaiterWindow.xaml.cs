@@ -9,13 +9,13 @@ namespace ReManage.Views
     {
         private WaiterViewModel _waiterViewModel;
 
-        // Изменение конструктора для принятия name и surname
-        public WaiterWindow(string name, string surname)
+        // Изменение конструктора для принятия employeeId, name и surname
+        public WaiterWindow(int employeeId, string name, string surname)
         {
             InitializeComponent();
 
-            // Передаем name и surname в ViewModel
-            _waiterViewModel = new WaiterViewModel(name, surname);
+            // Передаем employeeId, name и surname в ViewModel
+            _waiterViewModel = new WaiterViewModel(employeeId, name, surname);
             DataContext = _waiterViewModel;
         }
 

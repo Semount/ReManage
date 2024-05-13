@@ -1,0 +1,80 @@
+﻿<Window x:Class="ReManage.Views.OrderCreationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        Title="Создание заказа" Height="600" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Навигационная панель слева -->
+        <StackPanel Grid.Column="0" Background="LightGray">
+            <ListBox ItemsSource="{Binding Categories}" DisplayMemberPath="Name"
+                     SelectedItem="{Binding SelectedCategory}" Margin="5"/>
+            <Button Content="Все блюда" Command="{Binding ShowAllDishesCommand}" Margin="5"/>
+        </StackPanel>
+
+        <!-- Блюда справа -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Карточки блюд -->
+            <ScrollViewer Grid.Row="0">
+                <WrapPanel>
+                    <ItemsControl ItemsSource="{Binding Dishes}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderThickness="1" BorderBrush="Gray" Margin="5" Padding="10">
+                                    <StackPanel>
+                                        <Image Source="{Binding ImageSource}" Width="100" Height="100" Margin="5"/>
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="5"/>
+                                        <TextBlock Text="{Binding CategoryName}" Margin="5"/>
+                                        <TextBlock Text="{Binding Weight, StringFormat='Вес: {0} гр.'}" Margin="5"/>
+                                        <TextBlock Text="{Binding Price, StringFormat='Цена: {0} руб.'}" Margin="5"/>
+                                        <TextBlock Text="{Binding CookingTime, StringFormat='Время готовки: {0} мин.'}" Margin="5"/>
+                                        <Button Content="Добавить" Command="{Binding DataContext.AddDishCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                CommandParameter="{Binding}" Margin="5"/>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </WrapPanel>
+            </ScrollViewer>
+
+            <!-- Подтверждение заказа -->
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Grid>
+                    <TextBox Width="200" Text="{Binding Comment}" Name="OrderCommentTextBox"/>
+                    <TextBlock Text="Комментарий" Foreground="Gray" Margin="3,0,0,0"
+                               IsHitTestVisible="False" VerticalAlignment="Center">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Text, ElementName=OrderCommentTextBox}" Value="">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Text, ElementName=OrderCommentTextBox}" Value="{x:Static sys:String.Empty}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Text, ElementName=OrderCommentTextBox}" Value="{x:Null}">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Text, ElementName=OrderCommentTextBox}" Value="{x:Static sys:String.Empty}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </Grid>
+                <Button Content="Сделать заказ" Command="{Binding PlaceOrderCommand}" Margin="5"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

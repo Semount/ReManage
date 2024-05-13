@@ -4,13 +4,13 @@ using System.Windows.Input;
 
 namespace ReManage.UserControlData
 {
-    public partial class UserControlAdminRestaurantOverlay : UserControl
+    public partial class AdminRestaurantOverlay : UserControl
     {
         private bool isDragging;
         private Point mouseOffset;
         private RestaurantViewModel viewModel;
 
-        public UserControlAdminRestaurantOverlay()
+        public AdminRestaurantOverlay()
         {
             InitializeComponent();
             viewModel = new RestaurantViewModel();

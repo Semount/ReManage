@@ -116,4 +116,43 @@
         <Setter Property="Margin" Value="10,0" />
     </Style>
 
+    <!-- Стиль для DataGrid -->
+    <Style x:Key="DataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource {x:Type DataGrid}}">
+        <Setter Property="Background" Value="White" />
+        <Setter Property="BorderBrush" Value="#E0E0E0" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="RowBackground" Value="White" />
+        <Setter Property="AlternatingRowBackground" Value="#f9f9f9" />
+        <Setter Property="GridLinesVisibility" Value="Horizontal" />
+        <Setter Property="CanUserAddRows" Value="False" />
+        <Setter Property="CanUserDeleteRows" Value="False" />
+        <Setter Property="AutoGenerateColumns" Value="True" />
+        <Setter Property="IsReadOnly" Value="True" />
+    </Style>
+
+    <!-- Стиль для DataGridColumnHeader -->
+    <Style x:Key="DataGridColumnHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="#4CAF50" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontSize" Value="28" />
+        <Setter Property="FontWeight" Value="Bold" />
+        <Setter Property="Padding" Value="8,4" />
+        <Setter Property="BorderBrush" Value="White" />
+        <Setter Property="BorderThickness" Value="0,0,1,0" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+
+    <!-- Стиль для DataGridRow -->
+    <Style x:Key="DataGridRowStyle" TargetType="DataGridRow">
+        <Setter Property="BorderBrush" Value="#E0E0E0" />
+        <Setter Property="BorderThickness" Value="0,0,0,1" />
+        <Setter Property="Padding" Value="4,2" />
+    </Style>
+
+    <!-- Стиль для DataGridCell -->
+    <Style x:Key="DataGridCellStyle" TargetType="DataGridCell">
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="Padding" Value="8,4" />
+    </Style>
+
 </ResourceDictionary>

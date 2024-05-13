@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ReManage.UserControlData.UserControlAdminRestaurantOverlay"
+﻿<UserControl x:Class="ReManage.UserControlData.AdminRestaurantOverlay"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -48,7 +48,7 @@
                                               CommandParameter="{Binding}" />
                                 </ContextMenu>
                             </Border.ContextMenu>
-                            <TextBlock Text="{Binding Number}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White"/>
+                            <TextBlock Text="{Binding Number, StringFormat='Стол {0}'}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="20"/>
                         </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

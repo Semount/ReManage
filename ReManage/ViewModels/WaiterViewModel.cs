@@ -11,6 +11,8 @@ using System.Windows.Media.Imaging;
 public class WaiterViewModel : ViewModelBase
 {
     private NavigationItem _selectedNavigationItem;
+    private int _employeeId;
+
     public NavigationItem SelectedNavigationItem
     {
         get { return _selectedNavigationItem; }
@@ -19,7 +21,7 @@ public class WaiterViewModel : ViewModelBase
             if (SetProperty(ref _selectedNavigationItem, value))
             {
                 // Загрузите соответствующее содержимое
-                CurrentContent = Activator.CreateInstance(value.ContentType);
+                CurrentContent = Activator.CreateInstance(value.ContentType, _employeeId);
             }
         }
     }
@@ -35,8 +37,9 @@ public class WaiterViewModel : ViewModelBase
 
     public ObservableCollection<NavigationItem> SideMenuItems { get; } = new ObservableCollection<NavigationItem>();
 
-    public WaiterViewModel(string name, string surname)
+    public WaiterViewModel(int employeeId, string name, string surname)
     {
+        _employeeId = employeeId;
         CloseCommand = new RelayCommand(_ => CloseWindow());
 
         InitializeSideMenuItems();
@@ -62,7 +65,7 @@ public class WaiterViewModel : ViewModelBase
         ImageSource tableViewIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/Tables.png"));
         ImageSource orderIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/Order.png"));
 
-        SideMenuItems.Add(new NavigationItem("Графическое представление", tableViewIcon, typeof(UserControlGraphicRestaurant)));
-        SideMenuItems.Add(new NavigationItem("Список заказов", orderIcon, typeof(UserControlOrders)));
+        SideMenuItems.Add(new NavigationItem("Графическое представление", tableViewIcon, typeof(WaiterGraphicRestaurant)));
+        SideMenuItems.Add(new NavigationItem("Список заказов", orderIcon, typeof(WaiterOrders)));
     }
 }

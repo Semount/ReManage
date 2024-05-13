@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using System.Windows;
 
 public class RestaurantViewModel : INotifyPropertyChanged
 {
@@ -31,7 +30,6 @@ public class RestaurantViewModel : INotifyPropertyChanged
 
     private void AddTable()
     {
-        // Находим минимальный свободный номер для нового стола
         var newTableNumber = GetNextTableNumber();
         var newTable = new TableModel { X = 50, Y = 50, Number = newTableNumber };
         newTable.RemoveCommand = RemoveTableCommand;
@@ -91,13 +89,11 @@ public class RestaurantViewModel : INotifyPropertyChanged
 
     private int GetNextTableNumber()
     {
-        // Если нет столов, начинаем с 1
         if (!Tables.Any())
             return 1;
 
         var existingNumbers = Tables.Select(t => t.Number).OrderBy(x => x).ToList();
 
-        // Находим минимальный пропущенный номер
         int expectedNumber = 1;
         foreach (var num in existingNumbers)
         {
@@ -111,11 +107,11 @@ public class RestaurantViewModel : INotifyPropertyChanged
 
     public bool CheckForCollision(TableModel table, double newX, double newY)
     {
-        var tableRect = new Rect(newX, newY, table.Width, table.Height);
+        var tableRect = new System.Windows.Rect(newX, newY, table.Width, table.Height);
         foreach (var otherTable in Tables)
         {
             if (otherTable == table) continue;
-            var otherRect = new Rect(otherTable.X, otherTable.Y, otherTable.Width, otherTable.Height);
+            var otherRect = new System.Windows.Rect(otherTable.X, otherTable.Y, otherTable.Width, otherTable.Height);
             if (tableRect.IntersectsWith(otherRect))
             {
                 return true;
