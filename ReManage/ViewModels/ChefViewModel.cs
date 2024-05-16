@@ -8,59 +8,77 @@ using System.Windows.Media.Imaging;
 using ReManage.Core;
 using ReManage.UserControlData;
 
-public class ChefViewModel : ViewModelBase
+namespace ReManage.ViewModels
 {
-    private NavigationItem _selectedNavigationItem;
-    public NavigationItem SelectedNavigationItem
+    public class ChefViewModel : ViewModelBase
     {
-        get { return _selectedNavigationItem; }
-        set
+        private NavigationItem _selectedNavigationItem;
+        public NavigationItem SelectedNavigationItem
         {
-            if (SetProperty(ref _selectedNavigationItem, value))
+            get { return _selectedNavigationItem; }
+            set
             {
-                // Загрузите соответствующее содержимое
-                CurrentContent = Activator.CreateInstance(value.ContentType);
+                if (SetProperty(ref _selectedNavigationItem, value))
+                {
+                    if (value.ContentType == typeof(ChefCurrentOrder))
+                    {
+                        // Если заказ не выбран, используем CurrentOrderId
+                        CurrentContent = new ChefCurrentOrder(CurrentOrderId);
+                    }
+                    else
+                    {
+                        CurrentContent = Activator.CreateInstance(value.ContentType);
+                    }
+                }
             }
         }
-    }
 
-    private object _currentContent;
-    public object CurrentContent
-    {
-        get { return _currentContent; }
-        set { SetProperty(ref _currentContent, value); }
-    }
-
-    public ICommand CloseCommand { get; }
-
-    public ObservableCollection<NavigationItem> SideMenuItems { get; } = new ObservableCollection<NavigationItem>();
-
-    public ChefViewModel(string name, string surname)
-    {
-        CloseCommand = new RelayCommand(_ => CloseWindow());
-
-        InitializeSideMenuItems();
-
-        if (CurrentContent == null)
+        private object _currentContent;
+        public object CurrentContent
         {
-            CurrentContent = $"Здравствуйте, {name} {surname}.\nПожалуйста, воспользуйтесь навигационным меню слева для начала работы.";
+            get { return _currentContent; }
+            set { SetProperty(ref _currentContent, value); }
         }
-    }
 
-    private void CloseWindow()
-    {
-        Application.Current.Windows
-            .OfType<Window>()
-            .SingleOrDefault(w => w.IsActive)?
-            .Close();
-    }
+        public static int CurrentOrderId { get; set; }
 
-    private void InitializeSideMenuItems()
-    {
-        ImageSource ordersIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/Order.png"));
-        ImageSource currentOrderIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/CurrentOrder.png"));
+        public ICommand CloseCommand { get; }
 
-        SideMenuItems.Add(new NavigationItem("Все заказы", ordersIcon, typeof(ChefOrders)));
-        SideMenuItems.Add(new NavigationItem("Текущий заказ", currentOrderIcon, typeof(ChefCurrentOrder)));
+        public ObservableCollection<NavigationItem> SideMenuItems { get; } = new ObservableCollection<NavigationItem>();
+
+        public ChefViewModel(string name, string surname)
+        {
+            CloseCommand = new RelayCommand(_ => CloseWindow());
+
+            InitializeSideMenuItems();
+
+            if (CurrentContent == null)
+            {
+                CurrentContent = $"Здравствуйте, {name} {surname}.\nПожалуйста, воспользуйтесь навигационным меню слева для начала работы.";
+            }
+        }
+
+        private void CloseWindow()
+        {
+            Application.Current.Windows
+                .OfType<Window>()
+                .SingleOrDefault(w => w.IsActive)?
+                .Close();
+        }
+
+        private void InitializeSideMenuItems()
+        {
+            ImageSource ordersIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/Order.png"));
+            ImageSource currentOrderIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/CurrentOrder.png"));
+
+            SideMenuItems.Add(new NavigationItem("Все заказы", ordersIcon, typeof(ChefOrders)));
+            SideMenuItems.Add(new NavigationItem("Текущий заказ", currentOrderIcon, typeof(ChefCurrentOrder)));
+        }
+
+        public void NavigateToOrder(int orderId)
+        {
+            CurrentOrderId = orderId;
+            CurrentContent = new ChefCurrentOrder(orderId);
+        }
     }
 }

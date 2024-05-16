@@ -1,21 +1,17 @@
-﻿using NodaTime;
-using ReManage.Core;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using ReManage.Core;
 
 namespace ReManage.Models
 {
-    [Table("refrigerator")]
-    public class RefrigeratorModel : ViewModelBase
+    [Table("storage")]
+    public class StorageModel : ViewModelBase
     {
         [Column("id")]
         public int Id { get; set; }
 
         [Column("product_id")]
         public int ProductId { get; set; }
-
-        [ForeignKey("ProductId")]
-        public ProductModel Product { get; set; }
 
         [Column("amount")]
         public int Amount { get; set; }
@@ -24,9 +20,9 @@ namespace ReManage.Models
         public DateTime DateDelivered { get; set; }
 
         [Column("shelf_life")]
-        public Period ShelfLife { get; set; }
+        public DateTime ShelfLife { get; set; }
 
-        [Column("unfreeze_time")]
-        public Period UnfreezeTime { get; set; }
+        [ForeignKey("ProductId")]
+        public ProductModel Product { get; set; }
     }
 }

@@ -26,13 +26,37 @@
                    FontWeight="Bold"
                    Margin="0,0,0,10"/>
 
-        <DataGrid x:Name="OrdersDataGrid"
-                  Grid.Row="1"
-                  Style="{StaticResource DataGridStyle}"
-                  CellStyle="{StaticResource DataGridCellStyle}"
-                  ColumnHeaderStyle="{StaticResource DataGridColumnHeaderStyle}"
-                  RowStyle="{StaticResource DataGridRowStyle}"
-                  AlternatingRowBackground="#E8F5E9" />
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl ItemsSource="{Binding Orders}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="10">
+                            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding Status}" FontWeight="Bold" FontSize="14"/>
+                                        <TextBlock Text="{Binding CreationDate, StringFormat='{}Создано: {0:dd MMM yyyy}'}" />
+                                        <TextBlock Text="{Binding CreationTime, StringFormat='{}Время создания: {0:hh\\:mm}'}" />
+                                        <TextBlock Text="{Binding ServingTime, StringFormat='{}Подача: {0:hh\\:mm}'}" />
+                                        <TextBlock Text="{Binding Price, StringFormat='{}Стоимость: {0:0.00 ₽}'}" />
+                                        <TextBlock Text="{Binding Comment}" />
+                                    </StackPanel>
+                                    <Button Grid.Column="1" Content="{Binding IsExpanded, Converter={StaticResource BooleanToArrowConverter}}"
+                                            Command="{Binding DataContext.ToggleExpandCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding OrderId}" />
+                                </Grid>
+                            </Border>
+                            <local:OrderDetailsView Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                    DataContext="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
 
     </Grid>
 </UserControl>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using ReManage.Core;
@@ -33,6 +34,7 @@ namespace ReManage.Models
 
         [Column("comment")]
         public string comment { get; set; }
+
 
         // Преобразование времени в UTC
         public void SetCreationDateToUtc()

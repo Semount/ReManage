@@ -3,9 +3,66 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:ReManage.UserControlData"
+             xmlns:viewModels="clr-namespace:ReManage.ViewModels"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="400">
-    <Grid>
-        <TextBlock Text="Все заказы" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+             d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ReManage;component/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Текущие заказы"
+                   FontSize="20"
+                   FontWeight="Bold"
+                   Margin="0,0,0,10"/>
+
+        <ScrollViewer Grid.Row="1">
+            <ItemsControl x:Name="ordersItemsControl" ItemsSource="{Binding Orders}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewModels:OrderViewModel}">
+                        <StackPanel Margin="10">
+                            <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="5" Padding="10" Cursor="Hand" MouseLeftButtonUp="Border_MouseLeftButtonUp">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="{Binding CreationDate, StringFormat='{}Создано: {0:dd MMM yyyy}'}" />
+                                        <TextBlock Text="{Binding ServingTime, StringFormat='{}Подача: {0:hh\\:mm}'}" />
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <Button Content="Добавить в основной" CommandParameter="{Binding OrderId}" Command="{Binding DataContext.SelectOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                        <Button Content="Заказ готов" CommandParameter="{Binding OrderId}" Command="{Binding DataContext.MarkOrderReadyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                        <Grid Cursor="Hand" MouseLeftButtonUp="Grid_MouseLeftButtonUp">
+                                            <TextBlock Text="{Binding IsExpanded, Converter={StaticResource BooleanToArrowConverter}}" />
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                            <local:ChefOrderDetailsView Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                        DataContext="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Обновить" Command="{Binding RefreshOrdersCommand}" Margin="5" />
+        </StackPanel>
+
     </Grid>
 </UserControl>

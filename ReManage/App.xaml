@@ -1,9 +1,11 @@
 ﻿<Application x:Class="ReManage.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:core="clr-namespace:ReManage.Core"
              xmlns:local="clr-namespace:ReManage"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <core:BooleanToArrowConverter x:Key="BooleanToArrowConverter" />
+        <core:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Application.Resources>
 </Application>

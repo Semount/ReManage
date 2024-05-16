@@ -28,7 +28,7 @@ namespace ReManage.Models
         public decimal Price { get; set; }
 
         [Column("recipe")]
-        public string Recipe { get; set; }
+        public string? Recipe { get; set; }
 
         [Column("cooking_time")]
         public TimeSpan? CookingTime { get; set; }

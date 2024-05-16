@@ -2,6 +2,9 @@
 using ReManage.Core;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using ReManage.UserControlData;
+using ReManage.ViewModels;
+using System.Windows.Media.Imaging;
 
 namespace ReManage.Models
 {
@@ -45,6 +48,53 @@ namespace ReManage.Models
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private DishModel _dish;
+        [NotMapped]
+        public DishModel Dish
+        {
+            get => _dish;
+            set
+            {
+                _dish = value;
+                DishName = _dish?.Name;
+                OnPropertyChanged(nameof(Dish));
+                OnPropertyChanged(nameof(ImageSource));
+            }
+        }
+
+        [NotMapped]
+        public BitmapImage ImageSource => Dish?.ImageSource;
+
+        private OrderViewModel _order;
+        [NotMapped]
+        public OrderViewModel Order
+        {
+            get => _order;
+            set
+            {
+                if (_order != value)
+                {
+                    _order = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _isExpanded;
+        [NotMapped]
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                if (_isExpanded != value)
+                {
+                    _isExpanded = value;
+                    OnPropertyChanged();
+                }
+            }
         }
     }
 }

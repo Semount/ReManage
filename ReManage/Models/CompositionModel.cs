@@ -7,15 +7,21 @@ namespace ReManage.Models
     public class CompositionModel : ViewModelBase
     {
         [Column("id")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [Column("dish_id")]
-        public int dish_id { get; set; }
+        public int DishId { get; set; }
 
         [Column("product_id")]
-        public int product_id { get; set; }
+        public int ProductId { get; set; }
 
         [Column("amount")]
-        public int amount { get; set; }
+        public int Amount { get; set; }
+
+        [ForeignKey("DishId")]
+        public DishModel Dish { get; set; }
+
+        [ForeignKey("ProductId")]
+        public ProductModel Product { get; set; }
     }
 }

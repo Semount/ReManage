@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ReManage.Models;
 using NodaTime;
 
@@ -14,6 +13,10 @@ namespace ReManage.Core
         public DbSet<DishModel> Dishes { get; set; }
         public DbSet<CompositionModel> Compositions { get; set; }
         public DbSet<RefrigeratorModel> Refrigerators { get; set; }
+        public DbSet<ProductModel> Products { get; set; }
+        public DbSet<EmployeeModel> Employees { get; set; }
+        public DbSet<RoleModel> Roles { get; set; }
+        public DbSet<StorageModel> Storages { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,6 +34,10 @@ namespace ReManage.Core
             modelBuilder.Entity<DishModel>().ToTable("dishes");
             modelBuilder.Entity<CompositionModel>().ToTable("composition");
             modelBuilder.Entity<RefrigeratorModel>().ToTable("refrigerator");
+            modelBuilder.Entity<ProductModel>().ToTable("products");
+            modelBuilder.Entity<EmployeeModel>().ToTable("employees");
+            modelBuilder.Entity<RoleModel>().ToTable("roles");
+            modelBuilder.Entity<StorageModel>().ToTable("storage");
 
             modelBuilder.Entity<OrderModel>()
                 .Property(o => o.id)
@@ -45,6 +52,11 @@ namespace ReManage.Core
             modelBuilder.Entity<RefrigeratorModel>()
                 .Property(r => r.UnfreezeTime)
                 .HasConversion(periodConverter);
+
+            modelBuilder.Entity<RefrigeratorModel>()
+                .HasOne(r => r.Product)
+                .WithMany()
+                .HasForeignKey(r => r.ProductId);
         }
     }
 }
