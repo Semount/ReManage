@@ -12,7 +12,8 @@ namespace ReManage.ViewModels
         public int Id { get; set; }
         public string Name { get; set; }
         public string Recipe { get; set; }
-        public ObservableCollection<ProductModel> Ingredients { get; set; }
+        public int Amount { get; set; } // Количество заказанных блюд
+        public ObservableCollection<CompositionModel> Ingredients { get; set; }
 
         public bool IsExpanded
         {

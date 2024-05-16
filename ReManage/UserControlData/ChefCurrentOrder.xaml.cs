@@ -74,6 +74,7 @@ namespace ReManage.UserControlData
                 if (_order == null)
                     return;
 
+                // Получаем все заказанные блюда
                 var orderedDishModels = context.OrderedDishes
                                                .Where(od => od.order_id == _orderId)
                                                .ToList();
@@ -87,17 +88,24 @@ namespace ReManage.UserControlData
                     if (dish == null)
                         continue;
 
+                    // Получаем все ингредиенты и корректируем их количество в зависимости от количества заказанных блюд
                     var ingredients = context.Compositions
                                              .Where(c => c.DishId == dish.Id)
                                              .Join(context.Products,
                                                    c => c.ProductId,
                                                    p => p.Id,
-                                                   (c, p) => new ProductModel
+                                                   (c, p) => new CompositionModel
                                                    {
-                                                       Id = p.Id,
-                                                       Name = p.Name,
-                                                       Weight = p.Weight,
-                                                       Price = p.Price
+                                                       Id = c.Id,
+                                                       DishId = c.DishId,
+                                                       ProductId = p.Id,
+                                                       Amount = c.Amount * orderedDish.amount, // Масштабируем количество ингредиентов
+                                                       Product = new ProductModel
+                                                       {
+                                                           Id = p.Id,
+                                                           Name = p.Name,
+                                                           Weight = p.Weight
+                                                       }
                                                    })
                                              .ToList();
 
@@ -106,7 +114,8 @@ namespace ReManage.UserControlData
                         Id = dish.Id,
                         Name = dish.Name,
                         Recipe = dish.Recipe,
-                        Ingredients = new ObservableCollection<ProductModel>(ingredients),
+                        Amount = orderedDish.amount, // Количество заказанных блюд
+                        Ingredients = new ObservableCollection<CompositionModel>(ingredients),
                         IsExpanded = false
                     });
                 }

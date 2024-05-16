@@ -48,17 +48,18 @@
                                     <StackPanel Grid.Column="0">
                                         <TextBlock Text="{Binding Name}" FontWeight="Bold" />
                                         <TextBlock Text="{Binding Recipe}" Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}" />
+                                        <TextBlock Text="{Binding Amount, StringFormat='Количество: {0}'}" />
                                     </StackPanel>
                                     <TextBlock Grid.Column="1" Text="{Binding IsExpanded, Converter={StaticResource BooleanToArrowConverter}}" />
                                 </Grid>
                             </Border>
                             <ItemsControl ItemsSource="{Binding Ingredients}" Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <ItemsControl.ItemTemplate>
-                                    <DataTemplate DataType="{x:Type models:ProductModel}">
+                                    <DataTemplate DataType="{x:Type models:CompositionModel}">
                                         <StackPanel Orientation="Horizontal" Margin="10,5">
-                                            <TextBlock Text="{Binding Name}" />
-                                            <TextBlock Text="{Binding Weight, StringFormat='{} Вес: {0}'}" Margin="10,0,0,0" />
-                                            <TextBlock Text="{Binding Price, StringFormat='{} Цена: {0}'}" Margin="10,0,0,0" />
+                                            <TextBlock Text="{Binding Product.Name}" />
+                                            <TextBlock Text="{Binding Product.Weight, StringFormat='{} Вес: {0}'}" Margin="10,0,0,0" />
+                                            <TextBlock Text="{Binding Amount, StringFormat='{} Количество: {0}'}" Margin="10,0,0,0" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
