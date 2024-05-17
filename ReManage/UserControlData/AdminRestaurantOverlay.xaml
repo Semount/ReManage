@@ -7,9 +7,6 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ReManage;component/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
             <local:GridLineConverter x:Key="GridLineConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>

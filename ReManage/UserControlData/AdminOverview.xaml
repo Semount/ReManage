@@ -3,9 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:oxy="http://oxyplot.org/wpf"
              mc:Ignorable="d"
              d:DesignHeight="300" d:DesignWidth="400">
     <Grid>
-        <TextBlock Text="Сводка" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="Сводка" FontSize="20" HorizontalAlignment="Center" Margin="10"/>
+        <oxy:PlotView Grid.Row="1" Model="{Binding ProfitPlotModel}" Margin="10"/>
+        <oxy:PlotView Grid.Row="2" Model="{Binding PopularDishesPlotModel}" Margin="10"/>
     </Grid>
 </UserControl>

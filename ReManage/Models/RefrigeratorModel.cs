@@ -1,12 +1,10 @@
-﻿using NodaTime;
-using ReManage.Core;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ReManage.Models
 {
     [Table("refrigerator")]
-    public class RefrigeratorModel : ViewModelBase
+    public class RefrigeratorModel
     {
         [Column("id")]
         public int Id { get; set; }
@@ -24,9 +22,9 @@ namespace ReManage.Models
         public DateTime DateDelivered { get; set; }
 
         [Column("shelf_life")]
-        public Period ShelfLife { get; set; }
+        public TimeSpan ShelfLife { get; set; }
 
         [Column("unfreeze_time")]
-        public Period UnfreezeTime { get; set; }
+        public TimeSpan? UnfreezeTime { get; set; }
     }
 }

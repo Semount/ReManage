@@ -12,9 +12,6 @@
 
     <Window.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ReManage;component/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
             <local:PasswordProvider x:Key="PasswordProvider" />
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>

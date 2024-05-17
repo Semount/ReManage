@@ -3,6 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="Создание заказа" Height="600" Width="1200">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/ReManage;component/Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
@@ -18,8 +27,13 @@
         <!-- Навигационная панель слева -->
         <StackPanel Grid.Column="0" Grid.Row="0" Background="LightGray">
             <ListBox ItemsSource="{Binding Categories}" DisplayMemberPath="Name"
-                     SelectedItem="{Binding SelectedCategory}" Margin="5"/>
-            <Button Content="Все блюда" Command="{Binding ShowAllDishesCommand}" Margin="5"/>
+                     SelectedItem="{Binding SelectedCategory}" Margin="5"
+                     Style="{StaticResource ListBoxStyle}">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemStyle}" />
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+            <Button Content="Все блюда" Command="{Binding ShowAllDishesCommand}" Margin="5" Style="{StaticResource ButtonStyle}"/>
         </StackPanel>
 
         <!-- Карточки блюд -->
@@ -32,7 +46,7 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderThickness="1" BorderBrush="Gray" Margin="5" Padding="10" Width="150">
+                        <Border Style="{StaticResource CardStyle}">
                             <StackPanel>
                                 <Image Source="{Binding ImageSource}" Width="100" Height="100" Margin="5"/>
                                 <TextBlock Text="{Binding Name}" FontWeight="Bold" Margin="5" TextWrapping="Wrap"/>
@@ -41,7 +55,7 @@
                                 <TextBlock Text="{Binding Price, StringFormat='Цена: {0} руб.'}" Margin="5"/>
                                 <TextBlock Text="{Binding CookingTime, StringFormat='Время готовки: {0} мин.'}" Margin="5"/>
                                 <Button Content="Добавить" Command="{Binding DataContext.AddDishCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                        CommandParameter="{Binding}" Margin="5"/>
+                                        CommandParameter="{Binding}" Margin="5" Style="{StaticResource ButtonStyle}"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
@@ -53,15 +67,19 @@
         <ScrollViewer Grid.Column="2" Grid.Row="0" Background="LightGray" Margin="10">
             <StackPanel>
                 <TextBlock Text="Выбранные блюда" FontWeight="Bold" Margin="5"/>
-                <ListBox ItemsSource="{Binding OrderedDishes}" SelectedItem="{Binding SelectedOrderedDish}" Margin="5">
+                <ListBox ItemsSource="{Binding OrderedDishes}" SelectedItem="{Binding SelectedOrderedDish}" Margin="5"
+                         Style="{StaticResource ListBoxStyle}">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem" BasedOn="{StaticResource ListBoxItemStyle}" />
+                    </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="{Binding DishName}" Margin="5"/>
                                 <TextBlock Text="{Binding amount, StringFormat='x{0}'}" Margin="5"/>
-                                <Button Content="-" Command="{Binding DataContext.DecrementOrderedDishCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Margin="5"/>
-                                <Button Content="+" Command="{Binding DataContext.IncrementOrderedDishCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Margin="5"/>
-                                <Button Content="Удалить" Command="{Binding DataContext.RemoveOrderedDishCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Margin="5"/>
+                                <Button Content="-" Command="{Binding DataContext.DecrementOrderedDishCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Margin="5" Style="{StaticResource ButtonStyle}"/>
+                                <Button Content="+" Command="{Binding DataContext.IncrementOrderedDishCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Margin="5" Style="{StaticResource ButtonStyle}"/>
+                                <Button Content="Удалить" Command="{Binding DataContext.RemoveOrderedDishCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Margin="5" Style="{StaticResource ButtonStyle}"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
@@ -75,21 +93,9 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBox Width="200" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged, TargetNullValue='Комментарий'}" Name="OrderCommentTextBox" Margin="5">
-                <TextBox.Style>
-                    <Style TargetType="TextBox">
-                        <Style.Triggers>
-                            <Trigger Property="Text" Value="Комментарий">
-                                <Setter Property="Foreground" Value="Gray" />
-                            </Trigger>
-                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                                <Setter Property="Foreground" Value="Black" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </TextBox.Style>
-            </TextBox>
-            <Button Grid.Column="1" Content="Сделать заказ" Command="{Binding PlaceOrderCommand}" Margin="5"/>
+            <TextBox Width="200" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" Name="OrderCommentTextBox" Margin="5"
+                     GotFocus="OrderCommentTextBox_GotFocus" LostFocus="OrderCommentTextBox_LostFocus" />
+            <Button Grid.Column="1" Content="Сделать заказ" Command="{Binding PlaceOrderCommand}" Margin="5" Style="{StaticResource ButtonStyle}"/>
         </Grid>
     </Grid>
 </Window>

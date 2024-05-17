@@ -1,11 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using ReManage.Core;
 
 namespace ReManage.Models
 {
     [Table("storage")]
-    public class StorageModel : ViewModelBase
+    public class StorageModel
     {
         [Column("id")]
         public int Id { get; set; }

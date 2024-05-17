@@ -3,6 +3,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows;
+using System.Windows.Media;
 using Npgsql;
 using ReManage.Core;
 using ReManage.Models;
@@ -227,6 +229,32 @@ namespace ReManage.UserControlData
             }
 
             LoadOrders();
+        }
+
+        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var border = sender as Border;
+            if (border != null)
+            {
+                var order = border.DataContext as OrderViewModel;
+                if (order != null)
+                {
+                    order.IsExpanded = !order.IsExpanded;
+                }
+            }
+        }
+
+        private void Grid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            var grid = sender as Grid;
+            if (grid != null)
+            {
+                var order = grid.DataContext as OrderViewModel;
+                if (order != null)
+                {
+                    order.IsExpanded = !order.IsExpanded;
+                }
+            }
         }
     }
 }

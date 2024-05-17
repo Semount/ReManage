@@ -59,8 +59,14 @@ public class AdminViewModel : ViewModelBase
     {
         ImageSource restaurantOverviewIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/RestaurantOverview.png"));
         ImageSource overviewIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/Overview.png"));
+        ImageSource storageIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/storage.png"));
+        ImageSource employeesIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/employees.png"));
+        ImageSource menuIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/menu.png"));
 
         SideMenuItems.Add(new NavigationItem("Обзор ресторана", restaurantOverviewIcon, typeof(AdminRestaurantOverlay)));
         SideMenuItems.Add(new NavigationItem("Сводка", overviewIcon, typeof(AdminOverview)));
+        SideMenuItems.Add(new NavigationItem("Меню", menuIcon, typeof(AdminMenu)));
+        SideMenuItems.Add(new NavigationItem("Склад", storageIcon, typeof(AdminStorage)));
+        SideMenuItems.Add(new NavigationItem("Сотрудники", employeesIcon, typeof(AdminEmployees)));
     }
 }

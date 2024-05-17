@@ -7,17 +7,6 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="300">
 
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <!-- Подключение Styles.xaml -->
-                <ResourceDictionary Source="/ReManage;component/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-
-            <!-- Локальные ресурсы (если нужны) -->
-        </ResourceDictionary>
-    </UserControl.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

@@ -7,6 +7,32 @@
              xmlns:models="clr-namespace:ReManage.Models"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
+
+    <UserControl.Resources>
+        <Style x:Key="ChefCurrentOrderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Foreground" Value="#333333" />
+            <Setter Property="Margin" Value="2,2,0,2" />
+        </Style>
+
+        <Style x:Key="ChefCurrentOrderButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonStyle}">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Padding" Value="10,6" />
+            <Setter Property="Background" Value="#4CAF50" />
+            <Setter Property="BorderBrush" Value="#4CAF50" />
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#388E3C" />
+                    <Setter Property="BorderBrush" Value="#388E3C" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="#2E7D32" />
+                    <Setter Property="BorderBrush" Value="#2E7D32" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -15,21 +41,21 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0">
-            <TextBlock Text="Текущий заказ" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" />
+            <TextBlock Text="Текущий заказ" FontSize="24" FontWeight="Bold" Margin="0,0,0,10" Style="{StaticResource ChefCurrentOrderTextStyle}" />
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0">
-                    <TextBlock Text="Время заказа:" />
-                    <TextBlock Text="Время подачи:" />
-                    <TextBlock Text="Комментарий:" />
+                    <TextBlock Text="Время заказа:" Style="{StaticResource ChefCurrentOrderTextStyle}" />
+                    <TextBlock Text="Время подачи:" Style="{StaticResource ChefCurrentOrderTextStyle}" />
+                    <TextBlock Text="Комментарий:" Style="{StaticResource ChefCurrentOrderTextStyle}" />
                 </StackPanel>
                 <StackPanel Grid.Column="1">
-                    <TextBlock x:Name="OrderTimeLabel" Text="{Binding OrderTime, StringFormat='{}Время заказа: {0:dd MMM yyyy}'}" />
-                    <TextBlock x:Name="ServingTimeLabel" Text="{Binding ServingTime, StringFormat='{}Время подачи: {0:hh\\:mm}'}" />
-                    <TextBox x:Name="CommentTextBox" Text="{Binding Comment, Mode=TwoWay}" />
+                    <TextBlock x:Name="OrderTimeLabel" Text="{Binding OrderTime, StringFormat='{}Время заказа: {0:dd MMM yyyy}'}" Style="{StaticResource ChefCurrentOrderTextStyle}" />
+                    <TextBlock x:Name="ServingTimeLabel" Text="{Binding ServingTime, StringFormat='{}Время подачи: {0:hh\\:mm}'}" Style="{StaticResource ChefCurrentOrderTextStyle}" />
+                    <TextBox x:Name="CommentTextBox" Text="{Binding Comment, Mode=TwoWay}" Style="{StaticResource TextBoxStyle}" />
                 </StackPanel>
             </Grid>
         </StackPanel>
@@ -46,20 +72,27 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="0">
-                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" />
-                                        <TextBlock Text="{Binding Recipe}" Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}" />
-                                        <TextBlock Text="{Binding Amount, StringFormat='Количество: {0}'}" />
+                                        <TextBlock Text="{Binding Name}" FontWeight="Bold" Style="{StaticResource ChefCurrentOrderTextStyle}" />
+                                        <TextBlock Text="{Binding Recipe}"
+                                                   Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                   TextWrapping="Wrap"
+                                                   MaxWidth="1500"
+                                                   VerticalAlignment="Top"
+                                                   FontSize="16"
+                                                   Foreground="#333333"
+                                                   Margin="2,2,0,2" />
+                                        <TextBlock Text="{Binding Amount, StringFormat='Количество: {0}'}" Style="{StaticResource ChefCurrentOrderTextStyle}" />
                                     </StackPanel>
-                                    <TextBlock Grid.Column="1" Text="{Binding IsExpanded, Converter={StaticResource BooleanToArrowConverter}}" />
+                                    <TextBlock Grid.Column="1" Text="{Binding IsExpanded, Converter={StaticResource BooleanToArrowConverter}}" Style="{StaticResource ChefCurrentOrderTextStyle}" />
                                 </Grid>
                             </Border>
                             <ItemsControl ItemsSource="{Binding Ingredients}" Visibility="{Binding IsExpanded, Converter={StaticResource BooleanToVisibilityConverter}}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate DataType="{x:Type models:CompositionModel}">
                                         <StackPanel Orientation="Horizontal" Margin="10,5">
-                                            <TextBlock Text="{Binding Product.Name}" />
-                                            <TextBlock Text="{Binding Product.Weight, StringFormat='{} Вес: {0}'}" Margin="10,0,0,0" />
-                                            <TextBlock Text="{Binding Amount, StringFormat='{} Количество: {0}'}" Margin="10,0,0,0" />
+                                            <TextBlock Text="{Binding Product.Name}" Style="{StaticResource ChefCurrentOrderTextStyle}" />
+                                            <TextBlock Text="{Binding Product.Weight, StringFormat='{} Вес: {0}'}" Margin="10,0,0,0" Style="{StaticResource ChefCurrentOrderTextStyle}" />
+                                            <TextBlock Text="{Binding Amount, StringFormat='{} Количество: {0}'}" Margin="10,0,0,0" Style="{StaticResource ChefCurrentOrderTextStyle}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -71,7 +104,7 @@
         </ScrollViewer>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,0,0">
-            <Button x:Name="ReadyOrderButton" Content="Заказ готов" Command="{Binding MarkOrderReadyCommand}" Margin="5" />
+            <Button x:Name="ReadyOrderButton" Content="Заказ готов" Command="{Binding MarkOrderReadyCommand}" Margin="5" Style="{StaticResource ChefCurrentOrderButtonStyle}" />
         </StackPanel>
     </Grid>
 </UserControl>

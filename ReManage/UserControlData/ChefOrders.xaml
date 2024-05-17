@@ -8,14 +8,6 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/ReManage;component/Styles.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </UserControl.Resources>
-
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -24,9 +16,10 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Текущие заказы"
-                   FontSize="20"
+                   FontSize="24"
                    FontWeight="Bold"
-                   Margin="0,0,0,10"/>
+                   Margin="0,0,0,10"
+                   Style="{StaticResource ChefOrdersTextStyle}" />
 
         <ScrollViewer Grid.Row="1">
             <ItemsControl x:Name="ordersItemsControl" ItemsSource="{Binding Orders}">
@@ -40,14 +33,23 @@
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <StackPanel Grid.Column="0">
-                                        <TextBlock Text="{Binding CreationDate, StringFormat='{}Создано: {0:dd MMM yyyy}'}" />
-                                        <TextBlock Text="{Binding ServingTime, StringFormat='{}Подача: {0:hh\\:mm}'}" />
+                                        <TextBlock Text="{Binding CreationDate, StringFormat='{}Создано: {0:dd MMM yyyy}'}"
+                                                   Style="{StaticResource ChefOrdersTextStyle}" />
+                                        <TextBlock Text="{Binding ServingTime, StringFormat='{}Подача: {0:hh\\:mm}'}"
+                                                   Style="{StaticResource ChefOrdersTextStyle}" />
                                     </StackPanel>
                                     <StackPanel Grid.Column="1" Orientation="Horizontal">
-                                        <Button Content="Добавить в основной" CommandParameter="{Binding OrderId}" Command="{Binding DataContext.SelectOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-                                        <Button Content="Заказ готов" CommandParameter="{Binding OrderId}" Command="{Binding DataContext.MarkOrderReadyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                        <Button Content="Добавить в основной"
+                                                CommandParameter="{Binding OrderId}"
+                                                Command="{Binding DataContext.SelectOrderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                Style="{StaticResource ChefOrdersButtonStyle}" />
+                                        <Button Content="Заказ готов"
+                                                CommandParameter="{Binding OrderId}"
+                                                Command="{Binding DataContext.MarkOrderReadyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                Style="{StaticResource ChefOrdersButtonStyle}" />
                                         <Grid Cursor="Hand" MouseLeftButtonUp="Grid_MouseLeftButtonUp">
-                                            <TextBlock Text="{Binding IsExpanded, Converter={StaticResource BooleanToArrowConverter}}" />
+                                            <TextBlock Text="{Binding IsExpanded, Converter={StaticResource BooleanToArrowConverter}}"
+                                                       Style="{StaticResource ChefOrdersTextStyle}" />
                                         </Grid>
                                     </StackPanel>
                                 </Grid>
@@ -61,7 +63,10 @@
         </ScrollViewer>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="Обновить" Command="{Binding RefreshOrdersCommand}" Margin="5" />
+            <Button Content="Обновить"
+                    Command="{Binding RefreshOrdersCommand}"
+                    Margin="5"
+                    Style="{StaticResource ChefOrdersButtonStyle}" />
         </StackPanel>
 
     </Grid>

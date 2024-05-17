@@ -29,8 +29,9 @@
                                 </Grid.ColumnDefinitions>
                                 <Image Source="{Binding ImageSource}" Width="50" Height="50" Margin="5" />
                                 <StackPanel Grid.Column="1" Margin="10,0">
-                                    <TextBlock Text="{Binding DishName}" />
-                                    <TextBlock>
+                                    <TextBlock Text="{Binding DishName}"
+                                               Style="{StaticResource ChefOrdersTextStyle}"/>
+                                    <TextBlock Style="{StaticResource ChefOrdersTextStyle}">
                                         <TextBlock.Text>
                                             <Binding Path="amount" StringFormat="Количество: {0}" />
                                         </TextBlock.Text>

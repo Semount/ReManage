@@ -5,7 +5,14 @@
              xmlns:local="clr-namespace:ReManage"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <core:BooleanToArrowConverter x:Key="BooleanToArrowConverter" />
-        <core:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Ресурсы с ключами должны быть внутри ResourceDictionary -->
+            <core:BooleanToArrowConverter x:Key="BooleanToArrowConverter" />
+            <core:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

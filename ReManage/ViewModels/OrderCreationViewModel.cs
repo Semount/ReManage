@@ -77,13 +77,21 @@ public class OrderCreationViewModel : ViewModelBase
     public ICommand DecrementOrderedDishCommand { get; }
     public ICommand RemoveOrderedDishCommand { get; }
 
-    public OrderCreationViewModel(int employeeId, int tableNumber)
+    private Window _window;
+    public Window Window
+    {
+        get => _window;
+        set => SetProperty(ref _window, value);
+    }
+
+    public OrderCreationViewModel(int employeeId, int tableNumber, Window window)
     {
         _employeeId = employeeId;
         _tableNumber = tableNumber;
         _context = new RestaurantContext();
         _selectedDishes = new ObservableCollection<DishModel>();
         _orderedDishes = new ObservableCollection<OrderedDishModel>();
+        Window = window;
 
         AddDishCommand = new RelayCommand(AddDish);
         PlaceOrderCommand = new RelayCommand(PlaceOrder);
@@ -243,6 +251,7 @@ public class OrderCreationViewModel : ViewModelBase
 
             _context.SaveChanges();
             MessageBox.Show("Заказ успешно создан!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+            Window.Close();
         }
         else
         {

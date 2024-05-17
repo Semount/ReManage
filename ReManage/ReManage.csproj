@@ -10,18 +10,23 @@
   <ItemGroup>
     <None Remove="Resources\AppIcon.ico" />
     <None Remove="Resources\Icons\CurrentOrder.png" />
+    <None Remove="Resources\Icons\employees.png" />
     <None Remove="Resources\Icons\LogOut.png" />
+    <None Remove="Resources\Icons\menu.png" />
     <None Remove="Resources\Icons\Order.png" />
     <None Remove="Resources\Icons\Overview.png" />
     <None Remove="Resources\Icons\placeholder.png" />
     <None Remove="Resources\Icons\RestaurantOverview.png" />
+    <None Remove="Resources\Icons\storage.png" />
     <None Remove="Resources\Icons\Tables.png" />
     <None Remove="Resources\logo.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Resources\AppIcon.ico" />
+    <Resource Include="Resources\Icons\employees.png" />
     <Resource Include="Resources\Icons\LogOut.png" />
+    <Resource Include="Resources\Icons\menu.png" />
     <Resource Include="Resources\Icons\Overview.png" />
     <Resource Include="Resources\Icons\RestaurantOverview.png" />
   </ItemGroup>
@@ -30,6 +35,7 @@
     <Resource Include="Resources\Icons\CurrentOrder.png" />
     <Resource Include="Resources\Icons\Order.png" />
     <Resource Include="Resources\Icons\placeholder.png" />
+    <Resource Include="Resources\Icons\storage.png" />
     <Resource Include="Resources\Icons\Tables.png" />
     <Resource Include="Resources\logo.png" />
   </ItemGroup>
@@ -41,6 +47,10 @@
     <PackageReference Include="NodaTime" Version="3.1.11" />
     <PackageReference Include="Npgsql" Version="7.0.7" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime" Version="7.0.11" />
+    <PackageReference Include="Npgsql.NodaTime" Version="7.0.7" />
+    <PackageReference Include="OxyPlot.Core" Version="2.1.2" />
+    <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
   </ItemGroup>
 
 </Project>

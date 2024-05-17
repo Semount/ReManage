@@ -24,27 +24,29 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding DishName}" Grid.Column="0" />
+                        <TextBlock Text="{Binding DishName}" Grid.Column="0" Style="{StaticResource OrderDetailsTextStyle}" />
                         <Button Content="-" Grid.Column="1"
                                 Command="{Binding DataContext.DecreaseAmountCommand, RelativeSource={RelativeSource AncestorType={x:Type local:WaiterOrders}}}"
-                                CommandParameter="{Binding id}" />
-                        <TextBlock Text="{Binding amount}" Grid.Column="2" Margin="5,0" />
+                                CommandParameter="{Binding id}" 
+                                Style="{StaticResource OrderDetailsButtonStyle}" />
+                        <TextBlock Text="{Binding amount}" Grid.Column="2" Margin="5,0" Style="{StaticResource OrderDetailsTextStyle}" />
                         <Button Content="+" Grid.Column="3"
                                 Command="{Binding DataContext.IncreaseAmountCommand, RelativeSource={RelativeSource AncestorType={x:Type local:WaiterOrders}}}"
-                                CommandParameter="{Binding id}" />
+                                CommandParameter="{Binding id}" 
+                                Style="{StaticResource OrderDetailsButtonStyle}" />
                     </Grid>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <TextBox Grid.Row="1" Text="{Binding Comment}" Margin="5,10" />
+        <TextBox Grid.Row="1" Text="{Binding Comment}" Margin="5,10" Style="{StaticResource TextBoxStyle}" />
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Content="Сохранить изменения"
                     Command="{Binding DataContext.SaveChangesCommand, RelativeSource={RelativeSource AncestorType={x:Type local:WaiterOrders}}}"
-                    CommandParameter="{Binding OrderId}" Margin="5" />
+                    CommandParameter="{Binding OrderId}" Style="{StaticResource OrderDetailsButtonStyle}" />
             <Button Content="Удалить заказ" Background="Red"
                     Command="{Binding DataContext.DeleteOrderCommand, RelativeSource={RelativeSource AncestorType={x:Type local:WaiterOrders}}}"
-                    CommandParameter="{Binding OrderId}" Margin="5" />
+                    CommandParameter="{Binding OrderId}" Style="{StaticResource OrderDetailsButtonStyle}" />
         </StackPanel>
     </Grid>
 </UserControl>

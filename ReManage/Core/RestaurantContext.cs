@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ReManage.Models;
-using NodaTime;
+using System;
 
 namespace ReManage.Core
 {
@@ -43,20 +43,15 @@ namespace ReManage.Core
                 .Property(o => o.id)
                 .ValueGeneratedOnAdd();
 
-            var periodConverter = new PeriodConverter();
-
-            modelBuilder.Entity<RefrigeratorModel>()
-                .Property(r => r.ShelfLife)
-                .HasConversion(periodConverter);
-
-            modelBuilder.Entity<RefrigeratorModel>()
-                .Property(r => r.UnfreezeTime)
-                .HasConversion(periodConverter);
-
             modelBuilder.Entity<RefrigeratorModel>()
                 .HasOne(r => r.Product)
                 .WithMany()
                 .HasForeignKey(r => r.ProductId);
+
+            modelBuilder.Entity<StorageModel>()
+                .HasOne(s => s.Product)
+                .WithMany()
+                .HasForeignKey(s => s.ProductId);
         }
     }
 }
