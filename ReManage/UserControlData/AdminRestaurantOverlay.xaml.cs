@@ -17,21 +17,20 @@ namespace ReManage.UserControlData
             DataContext = viewModel;
         }
 
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void Ellipse_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            var border = sender as Border;
-            if (border != null)
+            if (sender is Grid grid && grid.DataContext is TableModel table)
             {
                 isDragging = true;
-                var mousePosition = e.GetPosition(border);
+                var mousePosition = e.GetPosition(grid);
                 mouseOffset = new Point(mousePosition.X, mousePosition.Y);
-                border.CaptureMouse();
+                grid.CaptureMouse();
             }
         }
 
-        private void Border_MouseMove(object sender, MouseEventArgs e)
+        private void Ellipse_MouseMove(object sender, MouseEventArgs e)
         {
-            if (isDragging && sender is Border border && border.DataContext is TableModel table)
+            if (isDragging && sender is Grid grid && grid.DataContext is TableModel table)
             {
                 var mousePosition = e.GetPosition(canvas);
 
@@ -40,8 +39,8 @@ namespace ReManage.UserControlData
                 double newY = mousePosition.Y - mouseOffset.Y;
 
                 // Ограничиваем координаты, чтобы не выходить за пределы Canvas
-                newX = Clamp(newX, 0, canvas.ActualWidth - border.Width);
-                newY = Clamp(newY, 0, canvas.ActualHeight - border.Height);
+                newX = Clamp(newX, 0, canvas.ActualWidth - grid.Width);
+                newY = Clamp(newY, 0, canvas.ActualHeight - grid.Height);
 
                 // Проверка на пересечение
                 if (!viewModel.CheckForCollision(table, newX, newY))
@@ -52,16 +51,25 @@ namespace ReManage.UserControlData
             }
         }
 
-        private void Border_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void Ellipse_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (isDragging && sender is Border border && border.DataContext is TableModel table)
+            if (isDragging && sender is Grid grid && grid.DataContext is TableModel table)
             {
                 isDragging = false;
-                border.ReleaseMouseCapture();
+                grid.ReleaseMouseCapture();
 
                 // Финальное выравнивание при отпускании кнопки мыши
                 table.X = table.SnapToGrid(table.X);
                 table.Y = table.SnapToGrid(table.Y);
+            }
+        }
+
+        private void Grid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            // Дополнительная проверка на null для контекстного меню
+            if (sender is Grid grid && grid.ContextMenu != null)
+            {
+                grid.ContextMenu.DataContext = grid.DataContext;
             }
         }
 

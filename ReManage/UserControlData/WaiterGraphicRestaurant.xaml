@@ -36,10 +36,11 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Width="{Binding Width}" Height="{Binding Height}" Background="DarkCyan" BorderBrush="Black" BorderThickness="1"
-                                MouseLeftButtonDown="Table_MouseLeftButtonDown">
+                        <Grid Width="{Binding Diameter}" Height="{Binding Diameter}"
+                              MouseLeftButtonDown="Table_MouseLeftButtonDown">
+                            <Ellipse Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="DarkCyan" Stroke="Black" StrokeThickness="1"/>
                             <TextBlock Text="{Binding Number, StringFormat='Стол {0}'}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="20"/>
-                        </Border>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemContainerStyle>

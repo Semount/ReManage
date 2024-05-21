@@ -36,17 +36,21 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Width="{Binding Width}" Height="{Binding Height}" Background="DarkCyan" BorderBrush="Black" BorderThickness="1"
-                                MouseLeftButtonDown="Border_MouseLeftButtonDown" MouseMove="Border_MouseMove" MouseLeftButtonUp="Border_MouseLeftButtonUp">
-                            <Border.ContextMenu>
+                        <Grid Width="{Binding Diameter}" Height="{Binding Diameter}"
+                              MouseLeftButtonDown="Ellipse_MouseLeftButtonDown"
+                              MouseMove="Ellipse_MouseMove"
+                              MouseLeftButtonUp="Ellipse_MouseLeftButtonUp"
+                              ContextMenuOpening="Grid_ContextMenuOpening">
+                            <Grid.ContextMenu>
                                 <ContextMenu>
                                     <MenuItem Header="Удалить стол"
                                               Command="{Binding RemoveCommand}"
                                               CommandParameter="{Binding}" />
                                 </ContextMenu>
-                            </Border.ContextMenu>
+                            </Grid.ContextMenu>
+                            <Ellipse Width="{Binding Diameter}" Height="{Binding Diameter}" Fill="DarkCyan" Stroke="Black" StrokeThickness="1"/>
                             <TextBlock Text="{Binding Number, StringFormat='Стол {0}'}" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White" FontSize="20"/>
-                        </Border>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
                 <ItemsControl.ItemContainerStyle>

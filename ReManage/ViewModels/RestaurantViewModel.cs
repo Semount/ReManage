@@ -107,12 +107,12 @@ public class RestaurantViewModel : INotifyPropertyChanged
 
     public bool CheckForCollision(TableModel table, double newX, double newY)
     {
-        var tableRect = new System.Windows.Rect(newX, newY, table.Width, table.Height);
+        var tableCircle = new System.Windows.Rect(newX, newY, table.Diameter, table.Diameter);
         foreach (var otherTable in Tables)
         {
             if (otherTable == table) continue;
-            var otherRect = new System.Windows.Rect(otherTable.X, otherTable.Y, otherTable.Width, otherTable.Height);
-            if (tableRect.IntersectsWith(otherRect))
+            var otherCircle = new System.Windows.Rect(otherTable.X, otherTable.Y, otherTable.Diameter, otherTable.Diameter);
+            if (tableCircle.IntersectsWith(otherCircle))
             {
                 return true;
             }

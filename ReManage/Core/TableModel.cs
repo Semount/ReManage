@@ -6,8 +6,7 @@ public class TableModel : INotifyPropertyChanged
 {
     private double _x;
     private double _y;
-    private int _width = 150;
-    private int _height = 150;
+    private int _diameter = 150; // Диаметр круга
     public const int GridSize = 75;
 
     private int _number;
@@ -46,23 +45,13 @@ public class TableModel : INotifyPropertyChanged
         return Math.Round(coordinate / GridSize) * GridSize;
     }
 
-    public int Width
+    public int Diameter
     {
-        get { return _width; }
+        get { return _diameter; }
         set
         {
-            _width = value;
-            OnPropertyChanged(nameof(Width));
-        }
-    }
-
-    public int Height
-    {
-        get { return _height; }
-        set
-        {
-            _height = value;
-            OnPropertyChanged(nameof(Height));
+            _diameter = value;
+            OnPropertyChanged(nameof(Diameter));
         }
     }
 
@@ -90,8 +79,7 @@ public class TableModel : INotifyPropertyChanged
         {
             X = this.X,
             Y = this.Y,
-            Width = this.Width,
-            Height = this.Height,
+            Diameter = this.Diameter,
             Number = this.Number,
             RemoveCommand = this.RemoveCommand
         };

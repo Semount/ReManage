@@ -22,7 +22,7 @@
     </Window.DataContext>
 
     <Grid>
-        <!-- Кнопка закрытия, остаётся без масштабирования -->
+        <!-- Кнопка закрытия -->
         <Button HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10" Padding="5" Style="{StaticResource ButtonStyle}" Width="25" Height="25">
             <Button.CommandParameter>
                 <Binding RelativeSource="{RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}" />
@@ -33,10 +33,8 @@
             <Path Data="M0,0 L1,1 M0,1 L1,0" Stroke="White" StrokeThickness="2" />
         </Button>
 
-        <!-- Основной контент с масштабированием -->
         <Grid Margin="20">
             <Grid.LayoutTransform>
-                <!-- Увеличиваем масштаб всех элементов в 1.5 раза -->
                 <ScaleTransform ScaleX="1.3" ScaleY="1.3" />
             </Grid.LayoutTransform>
 
@@ -54,20 +52,21 @@
             <!-- Поля ввода -->
             <StackPanel Grid.Row="2" HorizontalAlignment="Center" Width="300">
                 <TextBlock Text="Вход в систему" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,20" />
-                <TextBox x:Name="UsernameBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10" 
-                 FontSize="16" FontWeight="Medium"
-                 Style="{StaticResource TextBoxStyle}" />
+                <TextBox x:Name="UsernameBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,0,10"
+                         FontSize="16" FontWeight="Medium"
+                         Style="{StaticResource TextBoxStyle}" />
                 <PasswordBox x:Name="PasswordBox" Margin="0,0,0,10" FontSize="16" FontWeight="Medium"
-                     Style="{StaticResource PasswordBoxStyle}"
-                     PasswordChanged="PasswordBox_PasswordChanged">
+                             Style="{StaticResource PasswordBoxStyle}"
+                             PasswordChanged="PasswordBox_PasswordChanged">
                     <PasswordBox.RenderTransform>
                         <ScaleTransform />
                     </PasswordBox.RenderTransform>
                 </PasswordBox>
 
-                <Button Command="{Binding LoginCommand}" Content="Войти" 
-                FontSize="16" FontWeight="Bold"
-                Style="{StaticResource ButtonStyle}" />
+                <!-- Кнопка входа -->
+                <Button Command="{Binding LoginCommand}" Content="Войти"
+                        FontSize="16" FontWeight="Bold"
+                        Style="{StaticResource ButtonStyle}" />
             </StackPanel>
 
             <!-- Ошибка -->

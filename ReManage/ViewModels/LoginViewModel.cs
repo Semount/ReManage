@@ -10,7 +10,6 @@ namespace ReManage.ViewModels
     public class LoginViewModel : ViewModelBase
     {
         private string _username;
-        private string _password;
 
         public string Username
         {

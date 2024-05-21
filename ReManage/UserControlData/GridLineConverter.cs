@@ -13,7 +13,7 @@ namespace ReManage.UserControlData
             if (values.Length != 2 || !(values[0] is double width) || !(values[1] is double height))
                 return null;
 
-            double gridSize = TableModel.GridSize;  // Убедитесь, что это значение корректно определено в TableModel
+            double gridSize = TableModel.GridSize;  // Важно, чтобы это значение было корректно определено в TableModel
 
             PathGeometry geometry = new PathGeometry();
             string direction = parameter as string;

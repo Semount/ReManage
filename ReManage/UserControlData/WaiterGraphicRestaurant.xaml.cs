@@ -19,7 +19,7 @@ namespace ReManage.UserControlData
 
         private void Table_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (sender is Border border && border.DataContext is TableModel table)
+            if (sender is Grid grid && grid.DataContext is TableModel table)
             {
                 var orderCreationWindow = new OrderCreationWindow(_employeeId, table.Number);
                 orderCreationWindow.ShowDialog();
