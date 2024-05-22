@@ -62,10 +62,11 @@ namespace ReManage.UserControlData
         {
             refrigeratorProducts.Clear();
             string query = @"
-    SELECT id, name, weight, price, amount, date_delivered, 
-           expiration_date,
-           unfreeze_time
-    FROM v_refrigerator_products";
+SELECT r.id, p.name, p.weight, p.price, r.amount, r.date_delivered, 
+       r.shelf_life, r.unfreeze_time
+FROM refrigerator r
+INNER JOIN products p ON r.product_id = p.id
+ORDER BY r.date_delivered";
 
             using (var connection = DatabaseConnection.GetConnection())
             {
@@ -76,6 +77,10 @@ namespace ReManage.UserControlData
                     {
                         while (reader.Read())
                         {
+                            // Создаем Period из NpgsqlInterval
+                            var shelfLifeInterval = reader.GetFieldValue<NpgsqlTypes.NpgsqlInterval>(6);
+                            var shelfLifePeriod = Period.FromMonths(shelfLifeInterval.Months) + Period.FromDays(shelfLifeInterval.Days);
+
                             var product = new RefrigeratorViewModel
                             {
                                 Id = reader.GetInt32(0),
@@ -84,8 +89,8 @@ namespace ReManage.UserControlData
                                 Price = reader.GetDecimal(3),
                                 Amount = reader.GetInt32(4),
                                 DateDelivered = reader.GetDateTime(5),
-                                ExpirationDate = reader.GetDateTime(6),
-                                ///UnfreezeTime = reader.GetTimeSpan(7)
+                                ShelfLife = shelfLifePeriod,
+                                UnfreezeTime = reader.IsDBNull(7) ? TimeSpan.Zero : reader.GetTimeSpan(7)
                             };
 
                             refrigeratorProducts.Add(product);

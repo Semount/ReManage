@@ -20,7 +20,7 @@
                     <TextBlock Text="{Binding Price, StringFormat='Цена: {0:C}'}"/>
                     <TextBlock Text="{Binding Amount, StringFormat='Количество: {0}'}"/>
                     <TextBlock Text="{Binding DateDelivered, StringFormat='Дата доставки: {0:dd.MM.yyyy}'}"/>
-                    <TextBlock Text="{Binding ExpirationDate, StringFormat='Срок годности: {0:dd.MM.yyyy}'}"/>
+                    <TextBlock Text="{Binding ShelfLifeFormatted, StringFormat='Срок хранения: {0}'}"/>
                     <TextBlock Text="{Binding UnfreezeTimeFormatted, StringFormat='Время разморозки: {0}'}"
                                Visibility="{Binding UnfreezeTime, Converter={StaticResource NullToVisibilityConverter}}"/>
                 </StackPanel>
