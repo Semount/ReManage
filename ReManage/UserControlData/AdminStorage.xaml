@@ -5,22 +5,26 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:ReManage.UserControlData"
              xmlns:core="clr-namespace:ReManage.Core"
+             xmlns:converters="clr-namespace:ReManage.Converters"
              xmlns:viewModels="clr-namespace:ReManage.ViewModels"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <core:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <converters:ExpiryDateToBackgroundColorConverter x:Key="ExpiryDateToBackgroundColorConverter"/>
 
         <!-- DataTemplates -->
         <DataTemplate x:Key="RefrigeratorProductTemplate">
-            <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="5">
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="5"
+                    Background="{Binding ExpiryDate, Converter={StaticResource ExpiryDateToBackgroundColorConverter}}">
                 <StackPanel>
                     <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14"/>
                     <TextBlock Text="{Binding Weight, StringFormat='Вес: {0} г'}"/>
-                    <TextBlock Text="{Binding Price, StringFormat='Цена: {0:C}'}"/>
+                    <TextBlock Text="{Binding Price, StringFormat='Цена: {0} руб.'}"/>
                     <TextBlock Text="{Binding Amount, StringFormat='Количество: {0}'}"/>
                     <TextBlock Text="{Binding DateDelivered, StringFormat='Дата доставки: {0:dd.MM.yyyy}'}"/>
                     <TextBlock Text="{Binding ShelfLifeFormatted, StringFormat='Срок хранения: {0}'}"/>
+                    <TextBlock Text="{Binding ExpiryDate, StringFormat='Годен до: {0:dd.MM.yyyy}'}"/>
                     <TextBlock Text="{Binding UnfreezeTimeFormatted, StringFormat='Время разморозки: {0}'}"
                                Visibility="{Binding UnfreezeTime, Converter={StaticResource NullToVisibilityConverter}}"/>
                 </StackPanel>
@@ -28,29 +32,35 @@
         </DataTemplate>
 
         <DataTemplate x:Key="StorageProductTemplate">
-            <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="5">
+            <Border BorderBrush="Gray" BorderThickness="1" Padding="10" Margin="5"
+                    Background="{Binding ExpiryDate, Converter={StaticResource ExpiryDateToBackgroundColorConverter}}">
                 <StackPanel>
                     <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14"/>
                     <TextBlock Text="{Binding Weight, StringFormat='Вес: {0} г'}"/>
-                    <TextBlock Text="{Binding Price, StringFormat='Цена: {0:C}'}"/>
+                    <TextBlock Text="{Binding Price, StringFormat='Цена: {0} руб.'}"/>
                     <TextBlock Text="{Binding Amount, StringFormat='Количество: {0}'}"/>
                     <TextBlock Text="{Binding DateDelivered, StringFormat='Дата доставки: {0:dd.MM.yyyy}'}"/>
-                    <TextBlock Text="{Binding ExpirationDate, StringFormat='Срок годности: {0:dd.MM.yyyy}'}"/>
+                    <TextBlock Text="{Binding ShelfLifeFormatted, StringFormat='Срок хранения: {0}'}"/>
+                    <TextBlock Text="{Binding ExpiryDate, StringFormat='Годен до: {0:dd.MM.yyyy}'}"/>
                 </StackPanel>
             </Border>
         </DataTemplate>
     </UserControl.Resources>
 
     <Grid>
-        <StackPanel Orientation="Vertical">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                <Button x:Name="RefrigeratorButton" Content="Холодильник" Width="120" Margin="10" Click="RefrigeratorButton_Click"/>
-                <Button x:Name="StorageButton" Content="Склад" Width="120" Margin="10" Click="StorageButton_Click"/>
-                <Button x:Name="AddProductButton" Content="Добавить продукт" Width="150" Margin="10" Click="AddProductButton_Click"/>
-            </StackPanel>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+            <Button x:Name="RefrigeratorButton" Content="Холодильник" Width="120" Margin="10" Click="RefrigeratorButton_Click"/>
+            <Button x:Name="StorageButton" Content="Склад" Width="120" Margin="10" Click="StorageButton_Click"/>
+            <Button x:Name="AddProductButton" Content="Добавить продукт" Width="150" Margin="10" Click="AddProductButton_Click"/>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ItemsControl x:Name="ProductItemsControl" Margin="10">
                 <!-- DataTemplate will be set dynamically in code-behind -->
             </ItemsControl>
-        </StackPanel>
+        </ScrollViewer>
     </Grid>
 </UserControl>

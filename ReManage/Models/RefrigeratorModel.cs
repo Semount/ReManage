@@ -26,5 +26,8 @@ namespace ReManage.Models
 
         [Column("unfreeze_time")]
         public TimeSpan? UnfreezeTime { get; set; }
+
+        [Column("expiry_date")]
+        public DateTime ExpiryDate { get; set; }
     }
 }

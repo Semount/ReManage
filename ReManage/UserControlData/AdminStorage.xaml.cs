@@ -62,11 +62,11 @@ namespace ReManage.UserControlData
         {
             refrigeratorProducts.Clear();
             string query = @"
-SELECT r.id, p.name, p.weight, p.price, r.amount, r.date_delivered, 
-       r.shelf_life, r.unfreeze_time
-FROM refrigerator r
-INNER JOIN products p ON r.product_id = p.id
-ORDER BY r.date_delivered";
+        SELECT r.id, p.name, p.weight, p.price, r.amount, r.date_delivered, 
+               r.shelf_life, r.unfreeze_time, r.expiry_date
+        FROM refrigerator r
+        INNER JOIN products p ON r.product_id = p.id
+        ORDER BY r.date_delivered";
 
             using (var connection = DatabaseConnection.GetConnection())
             {
@@ -77,9 +77,8 @@ ORDER BY r.date_delivered";
                     {
                         while (reader.Read())
                         {
-                            // Создаем Period из NpgsqlInterval
                             var shelfLifeInterval = reader.GetFieldValue<NpgsqlTypes.NpgsqlInterval>(6);
-                            var shelfLifePeriod = Period.FromMonths(shelfLifeInterval.Months) + Period.FromDays(shelfLifeInterval.Days);
+                            var shelfLifePeriod = new PeriodBuilder { Months = shelfLifeInterval.Months, Days = shelfLifeInterval.Days }.Build();
 
                             var product = new RefrigeratorViewModel
                             {
@@ -90,7 +89,8 @@ ORDER BY r.date_delivered";
                                 Amount = reader.GetInt32(4),
                                 DateDelivered = reader.GetDateTime(5),
                                 ShelfLife = shelfLifePeriod,
-                                UnfreezeTime = reader.IsDBNull(7) ? TimeSpan.Zero : reader.GetTimeSpan(7)
+                                UnfreezeTime = reader.IsDBNull(7) ? TimeSpan.Zero : reader.GetTimeSpan(7),
+                                ExpiryDate = reader.GetDateTime(8)
                             };
 
                             refrigeratorProducts.Add(product);
@@ -104,9 +104,11 @@ ORDER BY r.date_delivered";
         {
             storageProducts.Clear();
             string query = @"
-    SELECT id, name, weight, price, amount, date_delivered, 
-           expiration_date
-    FROM v_storage_products";
+        SELECT s.id, p.name, p.weight, p.price, s.amount, s.date_delivered, 
+               s.shelf_life, s.expiry_date
+        FROM storage s
+        INNER JOIN products p ON s.product_id = p.id
+        ORDER BY date_delivered";
 
             using (var connection = DatabaseConnection.GetConnection())
             {
@@ -117,6 +119,8 @@ ORDER BY r.date_delivered";
                     {
                         while (reader.Read())
                         {
+                            var shelfLifeInterval = reader.GetFieldValue<NpgsqlTypes.NpgsqlInterval>(6);
+                            var shelfLifePeriod = new PeriodBuilder { Months = shelfLifeInterval.Months, Days = shelfLifeInterval.Days }.Build();
                             var product = new StorageViewModel
                             {
                                 Id = reader.GetInt32(0),
@@ -125,7 +129,8 @@ ORDER BY r.date_delivered";
                                 Price = reader.GetDecimal(3),
                                 Amount = reader.GetInt32(4),
                                 DateDelivered = reader.GetDateTime(5),
-                                ExpirationDate = reader.GetDateTime(6)
+                                ShelfLife = shelfLifePeriod,
+                                ExpiryDate = reader.GetDateTime(7)
                             };
 
                             storageProducts.Add(product);
