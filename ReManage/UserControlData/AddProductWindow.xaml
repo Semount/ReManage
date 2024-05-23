@@ -16,7 +16,7 @@
         <StackPanel Grid.Row="1">
             <StackPanel Orientation="Horizontal" Margin="0 10">
                 <Label Content="Продукт" Width="100" VerticalAlignment="Center"/>
-                <ComboBox x:Name="ProductComboBox" Width="300" SelectionChanged="ProductComboBox_SelectionChanged" Margin="5"/>
+                <ComboBox x:Name="ProductComboBox" Width="300" SelectionChanged="ProductComboBox_SelectionChanged" Style="{StaticResource ComboBoxStyle}" Margin="5"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0 10">
                 <Label Content="Количество" Width="100" VerticalAlignment="Center"/>
