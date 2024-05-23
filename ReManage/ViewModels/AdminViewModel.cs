@@ -41,7 +41,13 @@ public class AdminViewModel : ViewModelBase
 
         InitializeSideMenuItems();
 
-        if (CurrentContent == null)
+        // Устанавливаем CurrentContent в первую вкладку бокового меню
+        SelectedNavigationItem = SideMenuItems.FirstOrDefault();
+        if (SelectedNavigationItem != null)
+        {
+            CurrentContent = Activator.CreateInstance(SelectedNavigationItem.ContentType);
+        }
+        else
         {
             CurrentContent = $"Здравствуйте, {name} {surname}.\nПожалуйста, воспользуйтесь навигационным меню слева для начала работы.";
         }

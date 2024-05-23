@@ -44,8 +44,14 @@ public class WaiterViewModel : ViewModelBase
 
         InitializeSideMenuItems();
 
-        // Установка приветственного сообщения, если не выбрана ни одна вкладка
-        if (CurrentContent == null)
+        // Установите CurrentContent в первую вкладку бокового меню
+        SelectedNavigationItem = SideMenuItems.FirstOrDefault();
+        if (SelectedNavigationItem != null)
+        {
+            // Создайте экземпляр соответствующего типа для CurrentContent, передавая employeeId
+            CurrentContent = Activator.CreateInstance(SelectedNavigationItem.ContentType, employeeId);
+        }
+        else
         {
             CurrentContent = $"Здравствуйте, {name} {surname}.\nПожалуйста, воспользуйтесь навигационным меню слева для начала работы.";
         }

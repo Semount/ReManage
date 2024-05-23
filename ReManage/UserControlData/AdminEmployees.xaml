@@ -9,7 +9,7 @@
 
     <Grid>
         <StackPanel>
-            <WrapPanel Name="EmployeeCardsPanel" Orientation="Horizontal" />
+            <UniformGrid Name="EmployeeCardsPanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
             <Button Content="Добавить сотрудника" Style="{StaticResource AdminButtonStyle}" Click="AddEmployeeButton_Click" />
         </StackPanel>
 
