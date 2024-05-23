@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using ReManage.Models;
 using ReManage.Core;
+using ReManage.ViewModels;
+using ReManage.Views;
 
 namespace ReManage.UserControlData
 {
@@ -12,6 +15,7 @@ namespace ReManage.UserControlData
     {
         private List<DishModel> dishes;
         private List<CategoryModel> categories;
+        private DispatcherTimer searchTimer;
 
         public AdminMenu()
         {
@@ -19,12 +23,24 @@ namespace ReManage.UserControlData
             LoadCategories();
             LoadDishes();
             CategoryComboBox.SelectedIndex = 0; // Устанавливаем "Все категории" по умолчанию
+
+            // Инициализация таймера для дебаунсинга поиска
+            searchTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(300)
+            };
+            searchTimer.Tick += SearchTimer_Tick;
         }
 
         public List<CategoryModel> Categories
         {
             get { return categories; }
             set { categories = value; }
+        }
+
+        public List<CategoryModel> CategoriesWithoutAll
+        {
+            get { return categories?.Where(c => c.Id != 0).ToList(); }
         }
 
         private void LoadCategories()
@@ -56,7 +72,7 @@ namespace ReManage.UserControlData
                         var category = categories.FirstOrDefault(c => c.Id == dish.CategoryId);
                         dish.CategoryName = category?.Name;
                     }
-                    DishesItemsControl.ItemsSource = dishes;
+                    UpdateDishItemsControl();
                 }
                 catch (Exception ex)
                 {
@@ -65,18 +81,37 @@ namespace ReManage.UserControlData
             }
         }
 
+        private void UpdateDishItemsControl()
+        {
+            var searchQuery = SearchTextBox.Text.ToLower();
+            var selectedCategory = CategoryComboBox.SelectedItem as CategoryModel;
+
+            // Фильтрация по названию и категории
+            var filteredDishes = dishes
+                .Where(d => d.Name.ToLower().Contains(searchQuery) && (selectedCategory == null || selectedCategory.Id == 0 || d.CategoryId == selectedCategory.Id))
+                .OrderBy(d => d.CategoryId)
+                .ToList();
+
+            DishesItemsControl.ItemsSource = filteredDishes;
+        }
+
         private void CategoryComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedCategory = CategoryComboBox.SelectedItem as CategoryModel;
-            if (selectedCategory != null && selectedCategory.Id != 0)
-            {
-                var filteredDishes = dishes.Where(d => d.CategoryId == selectedCategory.Id).ToList();
-                DishesItemsControl.ItemsSource = filteredDishes;
-            }
-            else
-            {
-                DishesItemsControl.ItemsSource = dishes;
-            }
+            UpdateDishItemsControl();
+        }
+
+        private void SearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Перезапуск таймера при каждом изменении текста
+            searchTimer.Stop();
+            searchTimer.Start();
+        }
+
+        private void SearchTimer_Tick(object sender, EventArgs e)
+        {
+            // Остановка таймера и обновление данных
+            searchTimer.Stop();
+            UpdateDishItemsControl();
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -98,6 +133,7 @@ namespace ReManage.UserControlData
                             existingDish.Recipe = dish.Recipe;
                             existingDish.CookingTime = dish.CookingTime;
                             existingDish.CategoryId = dish.CategoryId;
+                            existingDish.Image = dish.Image;
                             context.SaveChanges();
                             MessageBox.Show("Изменения успешно сохранены.");
                         }
@@ -107,6 +143,48 @@ namespace ReManage.UserControlData
                         MessageBox.Show($"Ошибка при сохранении изменений: {ex.Message}");
                     }
                 }
+            }
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var dish = button?.Tag as DishModel;
+            if (dish != null)
+            {
+                var result = MessageBox.Show($"Вы уверены, что хотите удалить блюдо \"{dish.Name}\"?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    using (var context = new RestaurantContext())
+                    {
+                        try
+                        {
+                            var existingDish = context.Dishes.FirstOrDefault(d => d.Id == dish.Id);
+                            if (existingDish != null)
+                            {
+                                context.Dishes.Remove(existingDish);
+                                context.SaveChanges();
+                                MessageBox.Show("Блюдо успешно удалено.");
+                                LoadDishes(); // Перезагрузить блюда после удаления
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Ошибка при удалении блюда: {ex.Message}");
+                        }
+                    }
+                }
+            }
+        }
+
+        private void AddDishButton_Click(object sender, RoutedEventArgs e)
+        {
+            var addDishViewModel = new AddDishViewModel(categories);
+            var addDishWindow = new AddDishWindow { DataContext = addDishViewModel };
+
+            if (addDishWindow.ShowDialog() == true)
+            {
+                LoadDishes(); // Перезагрузить блюда после добавления нового
             }
         }
     }

@@ -9,11 +9,37 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ComboBox x:Name="CategoryComboBox" Width="200" SelectionChanged="CategoryComboBox_SelectionChanged" DisplayMemberPath="Name" HorizontalAlignment="Left" Margin="10"/>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <ItemsControl x:Name="DishesItemsControl" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Margin="10">
+            <ComboBox x:Name="CategoryComboBox" Width="200" SelectionChanged="CategoryComboBox_SelectionChanged" DisplayMemberPath="Name" HorizontalAlignment="Left" Margin="0,0,10,0"/>
+            <Button Content="Добавить блюдо" Width="200" HorizontalAlignment="Left" Click="AddDishButton_Click"/>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="10" HorizontalAlignment="Left">
+            <TextBox x:Name="SearchTextBox" Width="200" TextChanged="SearchTextBox_TextChanged"/>
+            <TextBlock Text="Поиск по названию" 
+                       Foreground="Gray" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Left"
+                       Margin="5,0,0,0"
+                       IsHitTestVisible="False">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Text, ElementName=SearchTextBox}" Value="">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </Grid>
+
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <ItemsControl x:Name="DishesItemsControl" HorizontalAlignment="Center" VirtualizingStackPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <WrapPanel/>
@@ -24,15 +50,29 @@
                         <Border Style="{StaticResource CardStyle}" Margin="10" Width="200">
                             <StackPanel>
                                 <Image Source="{Binding ImageSource}" Height="100" Width="100" Margin="5"/>
-                                <TextBox Text="{Binding Name}" Style="{StaticResource TextBoxStyle}" Margin="5"/>
-                                <TextBox Text="{Binding Weight}" Style="{StaticResource TextBoxStyle}" Margin="5"/>
-                                <TextBox Text="{Binding Price}" Style="{StaticResource TextBoxStyle}" Margin="5"/>
-                                <ComboBox SelectedValue="{Binding CategoryId}" DisplayMemberPath="Name" SelectedValuePath="Id" ItemsSource="{Binding ItemsSource, ElementName=CategoryComboBox}" Style="{StaticResource ComboBoxStyle}" Margin="5"/>
+
+                                <TextBlock Text="Название:" Margin="5,5,5,0"/>
+                                <TextBox Text="{Binding Name}" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,5"/>
+
+                                <TextBlock Text="Вес:" Margin="5,5,5,0"/>
+                                <TextBox Text="{Binding Weight}" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,5"/>
+
+                                <TextBlock Text="Цена:" Margin="5,5,5,0"/>
+                                <TextBox Text="{Binding Price}" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,5"/>
+
+                                <TextBlock Text="Категория:" Margin="5,5,5,0"/>
+                                <ComboBox SelectedValue="{Binding CategoryId}" DisplayMemberPath="Name" SelectedValuePath="Id" ItemsSource="{Binding CategoriesWithoutAll, RelativeSource={RelativeSource AncestorType={x:Type local:AdminMenu}}}" Style="{StaticResource ComboBoxStyle}" Margin="5,0,5,5"/>
+
+                                <TextBlock Text="Рецепт:" Margin="5,5,5,0"/>
                                 <ScrollViewer Height="60" VerticalScrollBarVisibility="Auto">
                                     <TextBox Text="{Binding Recipe}" Style="{StaticResource TextBoxStyle}" Margin="5" AcceptsReturn="True" TextWrapping="Wrap"/>
                                 </ScrollViewer>
-                                <TextBox Text="{Binding CookingTime}" Style="{StaticResource TextBoxStyle}" Margin="5"/>
+
+                                <TextBlock Text="Время приготовления:" Margin="5,5,5,0"/>
+                                <TextBox Text="{Binding CookingTime}" Style="{StaticResource TextBoxStyle}" Margin="5,0,5,5"/>
+
                                 <Button Content="Сохранить" Click="SaveButton_Click" Tag="{Binding}" Style="{StaticResource ButtonStyle}" Margin="5"/>
+                                <Button Content="Удалить" Click="DeleteButton_Click" Tag="{Binding}" Style="{StaticResource ButtonStyle}" Margin="5"/>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
