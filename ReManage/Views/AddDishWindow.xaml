@@ -32,6 +32,24 @@
             <TextBlock Text="Картинка:"/>
             <Button Content="Загрузить картинку" Command="{Binding LoadImageCommand}" Style="{StaticResource ButtonStyle}" Margin="0,5,0,10"/>
             <Image Source="{Binding ImageSource}" Height="100" Margin="0,5,0,10"/>
+
+            <TextBlock Text="Состав блюда:"/>
+            <ItemsControl ItemsSource="{Binding DishIngredients}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <ComboBox ItemsSource="{Binding DataContext.Products, RelativeSource={RelativeSource AncestorType=Window}}"
+                                      DisplayMemberPath="Name"
+                                      SelectedValuePath="Id"
+                                      SelectedValue="{Binding ProductId}"
+                                      Width="200" Margin="0,0,5,0"/>
+                            <TextBox Text="{Binding Amount}" Width="50" Margin="0,0,5,0"/>
+                            <Button Content="Удалить" Command="{Binding DataContext.RemoveIngredientCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}" Width="60"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Content="Добавить продукт" Command="{Binding AddIngredientCommand}" Style="{StaticResource ButtonStyle}" Margin="0,5,0,10"/>
         </StackPanel>
         <Button Content="Добавить блюдо" Grid.Row="1" Margin="10" HorizontalAlignment="Center" Command="{Binding AddDishCommand}" Style="{StaticResource ButtonStyle}"/>
     </Grid>

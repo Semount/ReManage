@@ -12,7 +12,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Сводка" FontSize="20" HorizontalAlignment="Center" Margin="10"/>
+        <TextBlock Text="Статистика" FontSize="20" HorizontalAlignment="Center" Margin="10"/>
         <oxy:PlotView Grid.Row="1" Model="{Binding ProfitPlotModel}" Margin="10"/>
         <oxy:PlotView Grid.Row="2" Model="{Binding PopularDishesPlotModel}" Margin="10"/>
     </Grid>

@@ -81,6 +81,22 @@ namespace ReManage.UserControlData
             }
         }
 
+        private List<ProductModel> LoadProducts()
+        {
+            using (var context = new RestaurantContext())
+            {
+                try
+                {
+                    return context.Products.ToList();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке продуктов: {ex.Message}");
+                    return new List<ProductModel>();
+                }
+            }
+        }
+
         private void UpdateDishItemsControl()
         {
             var searchQuery = SearchTextBox.Text.ToLower();
@@ -179,7 +195,8 @@ namespace ReManage.UserControlData
 
         private void AddDishButton_Click(object sender, RoutedEventArgs e)
         {
-            var addDishViewModel = new AddDishViewModel(categories);
+            var products = LoadProducts();
+            var addDishViewModel = new AddDishViewModel(categories, products);
             var addDishWindow = new AddDishWindow { DataContext = addDishViewModel };
 
             if (addDishWindow.ShowDialog() == true)

@@ -1,13 +1,14 @@
 ﻿using ReManage.Models;
 using ReManage.Core;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
+using System.Collections.Generic;
 
 namespace ReManage.ViewModels
 {
@@ -22,11 +23,15 @@ namespace ReManage.ViewModels
         private byte[] image;
         private BitmapImage imageSource;
 
-        public AddDishViewModel(List<CategoryModel> categories)
+        public AddDishViewModel(List<CategoryModel> categories, List<ProductModel> products)
         {
             Categories = categories;
+            Products = products;
+            DishIngredients = new ObservableCollection<CompositionModel>();
             LoadImageCommand = new RelayCommand(LoadImage);
             AddDishCommand = new RelayCommand(AddDish);
+            AddIngredientCommand = new RelayCommand(AddIngredient);
+            RemoveIngredientCommand = new RelayCommand(RemoveIngredient);
         }
 
         public string Name
@@ -84,9 +89,13 @@ namespace ReManage.ViewModels
         }
 
         public List<CategoryModel> Categories { get; }
+        public List<ProductModel> Products { get; }
+        public ObservableCollection<CompositionModel> DishIngredients { get; }
 
         public ICommand LoadImageCommand { get; }
         public ICommand AddDishCommand { get; }
+        public ICommand AddIngredientCommand { get; }
+        public ICommand RemoveIngredientCommand { get; }
 
         private void LoadImage(object parameter)
         {
@@ -119,6 +128,14 @@ namespace ReManage.ViewModels
                 {
                     context.Dishes.Add(newDish);
                     context.SaveChanges();
+
+                    foreach (var ingredient in DishIngredients)
+                    {
+                        ingredient.DishId = newDish.Id;
+                        context.Compositions.Add(ingredient);
+                    }
+
+                    context.SaveChanges();
                 }
 
                 MessageBox.Show("Блюдо добавлено успешно.");
@@ -127,6 +144,19 @@ namespace ReManage.ViewModels
             else
             {
                 MessageBox.Show(errorMessage, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void AddIngredient(object parameter)
+        {
+            DishIngredients.Add(new CompositionModel());
+        }
+
+        private void RemoveIngredient(object parameter)
+        {
+            if (parameter is CompositionModel ingredient)
+            {
+                DishIngredients.Remove(ingredient);
             }
         }
 

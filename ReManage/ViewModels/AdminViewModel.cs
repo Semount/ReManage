@@ -70,7 +70,7 @@ public class AdminViewModel : ViewModelBase
         ImageSource menuIcon = new BitmapImage(new Uri("pack://application:,,,/Resources/Icons/menu.png"));
 
         SideMenuItems.Add(new NavigationItem("Обзор ресторана", restaurantOverviewIcon, typeof(AdminRestaurantOverlay)));
-        SideMenuItems.Add(new NavigationItem("Сводка", overviewIcon, typeof(AdminOverview)));
+        SideMenuItems.Add(new NavigationItem("Статистика", overviewIcon, typeof(AdminOverview)));
         SideMenuItems.Add(new NavigationItem("Меню", menuIcon, typeof(AdminMenu)));
         SideMenuItems.Add(new NavigationItem("Склад", storageIcon, typeof(AdminStorage)));
         SideMenuItems.Add(new NavigationItem("Сотрудники", employeesIcon, typeof(AdminEmployees)));
