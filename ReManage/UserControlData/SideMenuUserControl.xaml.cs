@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using ReManage.Core; // Используйте NavigationItem из Core
+using ReManage.Core;
 
 namespace ReManage.UserControlData
 {

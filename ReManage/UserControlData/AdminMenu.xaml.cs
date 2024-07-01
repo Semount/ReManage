@@ -178,7 +178,13 @@ namespace ReManage.UserControlData
                             var existingDish = context.Dishes.FirstOrDefault(d => d.Id == dish.Id);
                             if (existingDish != null)
                             {
+                                // Delete related composition records
+                                var compositionRecords = context.Compositions.Where(c => c.DishId == dish.Id);
+                                context.Compositions.RemoveRange(compositionRecords);
+
+                                // Delete the dish
                                 context.Dishes.Remove(existingDish);
+
                                 context.SaveChanges();
                                 MessageBox.Show("Блюдо успешно удалено.");
                                 LoadDishes(); // Перезагрузить блюда после удаления
@@ -186,12 +192,17 @@ namespace ReManage.UserControlData
                         }
                         catch (Exception ex)
                         {
+                            while (ex.InnerException != null)
+                            {
+                                ex = ex.InnerException;
+                            }
                             MessageBox.Show($"Ошибка при удалении блюда: {ex.Message}");
                         }
                     }
                 }
             }
         }
+
 
         private void AddDishButton_Click(object sender, RoutedEventArgs e)
         {

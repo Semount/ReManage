@@ -7,7 +7,7 @@ using ReManage.Core;
 namespace ReManage.Models
 {
     [Table("dishes")]
-    public class DishModel : ViewModelBase
+    public class DishModel
     {
         [Column("id")]
         public int Id { get; set; }
@@ -37,25 +37,20 @@ namespace ReManage.Models
         public byte[] Image { get; set; }
 
         [NotMapped]
-        public BitmapImage ImageSource
-        {
-            get
-            {
-                if (Image == null || Image.Length == 0)
-                {
-                    return null;
-                }
+        public BitmapImage ImageSource => ConvertByteArrayToBitmapImage(Image);
 
-                using (MemoryStream ms = new MemoryStream(Image))
-                {
-                    BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.BeginInit();
-                    bitmapImage.StreamSource = ms;
-                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapImage.EndInit();
-                    bitmapImage.Freeze();
-                    return bitmapImage;
-                }
+        private BitmapImage ConvertByteArrayToBitmapImage(byte[] imageData)
+        {
+            if (imageData == null || imageData.Length == 0) return null;
+
+            using (var ms = new MemoryStream(imageData))
+            {
+                var image = new BitmapImage();
+                image.BeginInit();
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.StreamSource = ms;
+                image.EndInit();
+                return image;
             }
         }
     }

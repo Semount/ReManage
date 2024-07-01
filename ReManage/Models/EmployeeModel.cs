@@ -4,7 +4,7 @@ using ReManage.Core;
 namespace ReManage.Models
 {
     [Table("employees")]
-    public class EmployeeModel : ViewModelBase
+    public class EmployeeModel
     {
         [Column("id")]
         public int Id { get; set; }

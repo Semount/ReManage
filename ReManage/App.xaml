@@ -1,7 +1,7 @@
 ﻿<Application x:Class="ReManage.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:core="clr-namespace:ReManage.Core"
+             xmlns:converters="clr-namespace:ReManage.Converters"
              xmlns:local="clr-namespace:ReManage"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
@@ -10,9 +10,8 @@
                 <ResourceDictionary Source="Resources/Styles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Ресурсы с ключами должны быть внутри ResourceDictionary -->
-            <core:BooleanToArrowConverter x:Key="BooleanToArrowConverter" />
-            <core:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:BooleanToArrowConverter x:Key="BooleanToArrowConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

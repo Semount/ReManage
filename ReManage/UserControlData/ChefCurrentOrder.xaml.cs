@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.EntityFrameworkCore;
 using ReManage.Core;
 using ReManage.Models;
 using ReManage.ViewModels;
@@ -109,15 +111,13 @@ namespace ReManage.UserControlData
                                                    })
                                              .ToList();
 
-                    Dishes.Add(new DishViewModel
+                    var viewModel = new DishViewModel(dish)
                     {
-                        Id = dish.Id,
-                        Name = dish.Name,
-                        Recipe = dish.Recipe,
-                        Amount = orderedDish.amount, // Количество заказанных блюд
+                        Amount = orderedDish.amount,
                         Ingredients = new ObservableCollection<CompositionModel>(ingredients),
                         IsExpanded = false
-                    });
+                    };
+                    Dishes.Add(viewModel);
                 }
             }
 
@@ -135,9 +135,85 @@ namespace ReManage.UserControlData
                 var order = context.Orders.Find(_orderId);
                 if (order != null)
                 {
+                    // Получаем все заказанные блюда
+                    var orderedDishes = context.OrderedDishes
+                                               .Where(od => od.order_id == _orderId)
+                                               .ToList();
+
+                    // Для каждого блюда в заказе
+                    foreach (var orderedDish in orderedDishes)
+                    {
+                        var dish = context.Dishes.Find(orderedDish.dish_id);
+                        if (dish != null)
+                        {
+                            // Получаем состав блюда (ингредиенты и их количество)
+                            var compositions = context.Compositions
+                                                      .Where(c => c.DishId == dish.Id)
+                                                      .ToList();
+
+                            // Для каждого ингредиента блюда
+                            foreach (var composition in compositions)
+                            {
+                                var productId = composition.ProductId;
+                                var requiredAmount = composition.Amount * orderedDish.amount;
+
+                                // Ищем продукт в холодильнике
+                                var refrigeratorProduct = context.Refrigerators
+                                    .Where(rp => rp.ProductId == productId)
+                                    .Select(rp => new
+                                    {
+                                        rp.Id,
+                                        rp.ProductId,
+                                        rp.Amount,
+                                        rp.DateDelivered,
+                                        rp.UnfreezeTime,
+                                        rp.ExpiryDate
+                                    })
+                                    .ToList()
+                                    .FirstOrDefault();
+
+                                // Если продукт не найден в холодильнике, ищем его на складе
+                                if (refrigeratorProduct == null)
+                                {
+                                    var storageProduct = context.Storages
+                                        .Where(sp => sp.ProductId == productId)
+                                        .Select(sp => new
+                                        {
+                                            sp.Id,
+                                            sp.ProductId,
+                                            Amount = sp.Amount,
+                                            sp.DateDelivered,
+                                            sp.ExpiryDate
+                                        })
+                                        .ToList()
+                                        .FirstOrDefault();
+
+                                    if (storageProduct != null)
+                                    {
+                                        context.Database.ExecuteSqlRaw("UPDATE storage SET amount = amount - {0} WHERE id = {1}", requiredAmount, storageProduct.Id);
+                                    }
+                                }
+                                else
+                                {
+                                    context.Database.ExecuteSqlRaw("UPDATE refrigerator SET amount = amount - {0} WHERE id = {1}", requiredAmount, refrigeratorProduct.Id);
+                                }
+                            }
+                        }
+                    }
+
                     order.status_id = 2; // Статус "Готов к подаче"
                     context.SaveChanges();
                     LoadOrderData();
+                    // Переключение обратно на страницу с выбором заказов
+                    var parentWindow = Window.GetWindow(this);
+                    if (parentWindow != null && parentWindow.DataContext is ChefViewModel viewModel)
+                    {
+                        viewModel.NavigateToOrders();
+                    }
+                    else
+                    {
+                        throw new InvalidCastException("DataContext is not of type ChefViewModel.");
+                    }
                 }
             }
         }

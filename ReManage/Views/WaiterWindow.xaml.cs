@@ -21,7 +21,7 @@ namespace ReManage.Views
 
         private void SideMenuUserControl_SelectedMenuItemChanged(object sender, SideMenuUserControl.SelectedMenuItemEventArgs e)
         {
-            // Обработайте выбор вкладки
+            // Обработка выбора вкладки
             _waiterViewModel.SelectedNavigationItem = new NavigationItem(e.Title, e.Icon, e.ContentType);
         }
     }

@@ -2,7 +2,7 @@
 using NodaTime;
 using NodaTime.Text;
 
-namespace ReManage.Core
+namespace ReManage.Converters
 {
     public class PeriodConverter : ValueConverter<Period, string>
     {

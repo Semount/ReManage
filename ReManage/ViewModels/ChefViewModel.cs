@@ -86,5 +86,9 @@ namespace ReManage.ViewModels
             CurrentOrderId = orderId;
             CurrentContent = new ChefCurrentOrder(orderId);
         }
+        public void NavigateToOrders()
+        {
+            CurrentContent = new ChefOrders();
+        }
     }
 }

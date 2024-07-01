@@ -7,7 +7,7 @@ using ReManage.Core;
 namespace ReManage.Models
 {
     [Table("orders")]
-    public class OrderModel : ViewModelBase
+    public class OrderModel
     {
         [Key]
         [Column("id")]

@@ -20,7 +20,7 @@ public class WaiterViewModel : ViewModelBase
         {
             if (SetProperty(ref _selectedNavigationItem, value))
             {
-                // Загрузите соответствующее содержимое
+                // Загрузка соответствующего содержимого
                 CurrentContent = Activator.CreateInstance(value.ContentType, _employeeId);
             }
         }
@@ -44,11 +44,11 @@ public class WaiterViewModel : ViewModelBase
 
         InitializeSideMenuItems();
 
-        // Установите CurrentContent в первую вкладку бокового меню
+        // Установка CurrentContent в первую вкладку бокового меню
         SelectedNavigationItem = SideMenuItems.FirstOrDefault();
         if (SelectedNavigationItem != null)
         {
-            // Создайте экземпляр соответствующего типа для CurrentContent, передавая employeeId
+            // Создание экземпляра соответствующего типа для CurrentContent, передавая employeeId
             CurrentContent = Activator.CreateInstance(SelectedNavigationItem.ContentType, employeeId);
         }
         else

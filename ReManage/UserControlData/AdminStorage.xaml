@@ -10,7 +10,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <core:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <converters:ExpiryDateToBackgroundColorConverter x:Key="ExpiryDateToBackgroundColorConverter"/>
 
         <!-- DataTemplates -->

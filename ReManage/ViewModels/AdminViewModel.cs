@@ -18,7 +18,7 @@ public class AdminViewModel : ViewModelBase
         {
             if (SetProperty(ref _selectedNavigationItem, value))
             {
-                // Загрузите соответствующее содержимое
+                // Загрузка соответствующего содержимого
                 CurrentContent = Activator.CreateInstance(value.ContentType);
             }
         }
