@@ -1,5 +1,4 @@
-﻿// MainWindow.xaml.cs
-using ReManage.ViewModels;
+﻿using ReManage.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;

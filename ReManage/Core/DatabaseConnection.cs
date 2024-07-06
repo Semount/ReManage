@@ -1,14 +1,38 @@
-﻿using Npgsql;
+﻿using System.Configuration;
+using Npgsql;
 
 namespace ReManage.Core
 {
     public static class DatabaseConnection
     {
-        private static string connectionString = "Server=localhost;Port=5432;Database=ReManage;User Id=postgres;Password=35x45x;";
+        private const string ConnectionStringName = "DefaultConnection";
 
-        public static NpgsqlConnection GetConnection()
+        public static string GetConnectionString()
         {
-            return new NpgsqlConnection(connectionString);
+            return ConfigurationManager.ConnectionStrings[ConnectionStringName]?.ConnectionString;
+        }
+
+        public static void SetConnectionString(string newConnectionString)
+        {
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var connectionStringsSection = config.ConnectionStrings;
+
+            if (connectionStringsSection.ConnectionStrings[ConnectionStringName] == null)
+            {
+                connectionStringsSection.ConnectionStrings.Add(new ConnectionStringSettings(ConnectionStringName, newConnectionString, "Npgsql"));
+            }
+            else
+            {
+                connectionStringsSection.ConnectionStrings[ConnectionStringName].ConnectionString = newConnectionString;
+            }
+
+            config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("connectionStrings");
+        }
+
+        public static bool IsConnectionStringSet()
+        {
+            return !string.IsNullOrEmpty(GetConnectionString());
         }
     }
 }

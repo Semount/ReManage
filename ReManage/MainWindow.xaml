@@ -72,6 +72,14 @@
             <!-- Ошибка -->
             <TextBlock Grid.Row="3" Text="{Binding ErrorMessage}" Foreground="Red" HorizontalAlignment="Center" Visibility="{Binding ShowErrorMessage, Converter={StaticResource BooleanToVisibilityConverter}}" />
 
+            <!-- Настройка подключения к БД -->
+            <Button Content="Настройки БД"
+                    Command="{Binding OpenDatabaseSettingsCommand}"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="10"
+                    Style="{StaticResource ButtonStyle}"/>
+
             <!-- Нижняя панель -->
             <Grid Grid.Row="4">
                 <TextBlock Text="© Антипенко Сергей, 2024" VerticalAlignment="Bottom" HorizontalAlignment="Center" />

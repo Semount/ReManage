@@ -68,7 +68,7 @@ namespace ReManage.UserControlData
         INNER JOIN products p ON r.product_id = p.id
         ORDER BY r.date_delivered";
 
-            using (var connection = DatabaseConnection.GetConnection())
+            using (var connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
             {
                 connection.Open();
                 using (var command = new NpgsqlCommand(query, connection))
@@ -110,7 +110,7 @@ namespace ReManage.UserControlData
         INNER JOIN products p ON s.product_id = p.id
         ORDER BY date_delivered";
 
-            using (var connection = DatabaseConnection.GetConnection())
+            using (var connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
             {
                 connection.Open();
                 using (var command = new NpgsqlCommand(query, connection))

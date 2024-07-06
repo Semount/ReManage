@@ -45,7 +45,7 @@ namespace ReManage.UserControlData
                            "JOIN order_status s ON o.status_id = s.id " +
                            "WHERE o.employee_id = @Emp_id";
 
-            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
+            using (NpgsqlConnection connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
             {
                 connection.Open();
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
@@ -90,7 +90,7 @@ namespace ReManage.UserControlData
 
             ObservableCollection<OrderedDishModel> dishes = new ObservableCollection<OrderedDishModel>();
 
-            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
+            using (NpgsqlConnection connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
             {
                 connection.Open();
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
@@ -156,7 +156,7 @@ namespace ReManage.UserControlData
                 string updateOrderQuery = "UPDATE orders SET comment = @Comment WHERE id = @OrderId";
                 string updateDishQuery = "UPDATE ordered_dishes SET amount = @Amount WHERE id = @DishId";
 
-                using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
+                using (NpgsqlConnection connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
                 {
                     connection.Open();
                     using (NpgsqlTransaction transaction = connection.BeginTransaction())
@@ -199,7 +199,7 @@ namespace ReManage.UserControlData
             string deleteOrderedDishesQuery = "DELETE FROM ordered_dishes WHERE order_id = @OrderId";
             string deleteOrderQuery = "DELETE FROM orders WHERE id = @OrderId";
 
-            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
+            using (NpgsqlConnection connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
             {
                 connection.Open();
                 using (NpgsqlTransaction transaction = connection.BeginTransaction())

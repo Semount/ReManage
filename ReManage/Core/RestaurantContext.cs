@@ -20,8 +20,10 @@ namespace ReManage.Core
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;Database=ReManage;User Id=postgres;Password=35x45x");
+            optionsBuilder.UseNpgsql(DatabaseConnection.GetConnectionString());
         }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

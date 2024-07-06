@@ -151,7 +151,7 @@ namespace ReManage.UserControlData
 
         private void AddProductToDatabase(int productId, int amount, DateTime dateDelivered)
         {
-            using (var connection = DatabaseConnection.GetConnection())
+            using (var connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
             {
                 connection.Open();
                 string query = ProductType == "Refrigerator" ?

@@ -81,7 +81,7 @@ namespace ReManage.ViewModels
             string enteredLogin = Username;
             string enteredPassword = PasswordProvider.Password;
 
-            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
+            using (NpgsqlConnection connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
             {
                 connection.Open();
 
@@ -157,6 +157,28 @@ namespace ReManage.ViewModels
                 }
                 return _closeCommand;
             }
+        }
+
+        private ICommand _openDatabaseSettingsCommand;
+        public ICommand OpenDatabaseSettingsCommand
+        {
+            get
+            {
+                if (_openDatabaseSettingsCommand == null)
+                {
+                    _openDatabaseSettingsCommand = new RelayCommand(OpenDatabaseSettings);
+                }
+                return _openDatabaseSettingsCommand;
+            }
+        }
+
+        private void OpenDatabaseSettings(object obj)
+        {
+            var settingsWindow = new DatabaseSettingsWindow
+            {
+                DataContext = new DatabaseSettingsViewModel()
+            };
+            settingsWindow.ShowDialog();
         }
 
         private void CloseAction(object obj)

@@ -35,7 +35,7 @@ namespace ReManage.UserControlData
                            "FROM orders o " +
                            "WHERE o.status_id = 1"; // Статус "Готовится"
 
-            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
+            using (NpgsqlConnection connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
             {
                 connection.Open();
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
@@ -73,7 +73,7 @@ namespace ReManage.UserControlData
 
             ObservableCollection<OrderedDishModel> dishes = new ObservableCollection<OrderedDishModel>();
 
-            using (NpgsqlConnection connection = DatabaseConnection.GetConnection())
+            using (NpgsqlConnection connection = new NpgsqlConnection(DatabaseConnection.GetConnectionString()))
             {
                 connection.Open();
                 using (NpgsqlCommand command = new NpgsqlCommand(query, connection))
