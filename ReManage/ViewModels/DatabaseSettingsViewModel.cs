@@ -4,6 +4,10 @@ using ReManage.Core;
 using Npgsql;
 using System.Windows;
 using System.Threading.Tasks;
+using System;
+using System.IO;
+using System.Collections.Generic;
+using System.Text;
 
 namespace ReManage.ViewModels
 {
@@ -53,14 +57,28 @@ namespace ReManage.ViewModels
             }
         }
 
+        private string _adminUserId;
+        public string AdminUserId
+        {
+            get => _adminUserId;
+            set
+            {
+                _adminUserId = value;
+                OnPropertyChanged(nameof(AdminUserId));
+            }
+        }
+
         public ICommand SaveCommand { get; }
         public ICommand TestConnectionCommand { get; }
+
+        public ICommand CreateDatabaseCommand { get; }
 
         public DatabaseSettingsViewModel()
         {
             LoadCurrentSettings();
             SaveCommand = new RelayCommand(SaveSettings);
             TestConnectionCommand = new RelayCommand(TestConnection);
+            CreateDatabaseCommand = new RelayCommand(CreateDatabase);
         }
 
         private void LoadCurrentSettings()
@@ -143,6 +161,132 @@ namespace ReManage.ViewModels
             {
                 return false;
             }
+        }
+
+        private async void CreateDatabase(object parameter)
+        {
+            var result = MessageBox.Show("Вы уверены, что хотите создать новую базу данных? Это действие перезапишет существующую базу данных, если она существует.",
+                                         "Подтверждение",
+                                         MessageBoxButton.YesNo,
+                                         MessageBoxImage.Warning);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                var adminPasswordBox = parameter as PasswordBox;
+                var adminPassword = adminPasswordBox?.Password;
+
+                if (string.IsNullOrEmpty(AdminUserId) || string.IsNullOrEmpty(adminPassword))
+                {
+                    MessageBox.Show("Пожалуйста, введите учетные данные администратора PostgreSQL.", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                var builderPostgres = new NpgsqlConnectionStringBuilder
+                {
+                    Host = Server,
+                    Port = int.Parse(Port),
+                    Database = "postgres", // Подключаемся к системной БД postgres для создания новой БД
+                    Username = AdminUserId,
+                    Password = adminPassword
+                };
+
+                var builderReManage = new NpgsqlConnectionStringBuilder
+                {
+                    Host = Server,
+                    Port = int.Parse(Port),
+                    Database = Database,
+                    Username = AdminUserId,
+                    Password = adminPassword
+                };
+
+                try
+                {
+                    // Создаем новую базу данных
+                    using (var connection = new NpgsqlConnection(builderPostgres.ToString()))
+                    {
+                        await connection.OpenAsync();
+                        using (var cmd = new NpgsqlCommand($"DROP DATABASE IF EXISTS \"{Database}\"; CREATE DATABASE \"{Database}\" WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'English_United States.1251'", connection))
+                        {
+                            await cmd.ExecuteNonQueryAsync();
+                        }
+                    }
+
+                    // Подключаемся к новой базе данных и выполняем скрипт
+                    using (var connection = new NpgsqlConnection(builderReManage.ToString()))
+                    {
+                        await connection.OpenAsync();
+                        string sql = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ReManage_DB.sql"));
+
+                        // Извлекаем только валидные SQL команды
+                        var validCommands = ExtractValidSqlCommands(sql);
+
+                        foreach (var command in validCommands)
+                        {
+                            try
+                            {
+                                using (var cmd = new NpgsqlCommand(command, connection))
+                                {
+                                    await cmd.ExecuteNonQueryAsync();
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                throw new Exception($"Ошибка в команде: {command}\n\nОшибка: {ex.Message}");
+                            }
+                        }
+                    }
+
+                    MessageBox.Show("База данных успешно создана и заполнена данными.", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при создании базы данных: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private List<string> ExtractValidSqlCommands(string sql)
+        {
+            var commands = new List<string>();
+            var currentCommand = new StringBuilder();
+            bool inMultilineCommand = false;
+
+            foreach (var line in sql.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+            {
+                string trimmedLine = line.Trim();
+
+                if (string.IsNullOrWhiteSpace(trimmedLine) || trimmedLine.StartsWith("--"))
+                    continue;
+
+                if (trimmedLine.StartsWith("CREATE ") || trimmedLine.StartsWith("ALTER ") || trimmedLine.StartsWith("INSERT "))
+                {
+                    if (currentCommand.Length > 0)
+                    {
+                        commands.Add(currentCommand.ToString());
+                        currentCommand.Clear();
+                    }
+                    inMultilineCommand = true;
+                }
+
+                currentCommand.AppendLine(trimmedLine);
+
+                if (trimmedLine.EndsWith(";"))
+                {
+                    if (inMultilineCommand || currentCommand.Length > 0)
+                    {
+                        commands.Add(currentCommand.ToString());
+                        currentCommand.Clear();
+                        inMultilineCommand = false;
+                    }
+                }
+            }
+
+            if (currentCommand.Length > 0)
+            {
+                commands.Add(currentCommand.ToString());
+            }
+
+            return commands;
         }
     }
 }

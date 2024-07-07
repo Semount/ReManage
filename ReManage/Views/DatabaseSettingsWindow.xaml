@@ -34,6 +34,12 @@
         </Border>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+            <TextBlock Text="Администратор PostgreSQL:" Margin="0,20,0,5"/>
+            <TextBox Text="{Binding AdminUserId}" Style="{StaticResource TextBoxStyle}"/>
+
+            <TextBlock Text="Пароль администратора:" Margin="0,10,0,5"/>
+            <PasswordBox x:Name="AdminPasswordBox" Style="{StaticResource PasswordBoxStyle}"/>
+
             <Button Content="Проверить подключение"
                     Command="{Binding TestConnectionCommand}"
                     CommandParameter="{Binding ElementName=PasswordBox}"
@@ -44,6 +50,12 @@
                     Command="{Binding SaveCommand}"
                     CommandParameter="{Binding ElementName=PasswordBox}"
                     Style="{StaticResource ButtonStyle}"/>
+            <Button Content="Создать базу данных"
+                    Command="{Binding CreateDatabaseCommand}"
+                    CommandParameter="{Binding ElementName=AdminPasswordBox}"
+                    Style="{StaticResource ButtonStyle}"
+                    Background="#FF5045"
+                    Margin="0,0,10,0"/>
         </StackPanel>
     </Grid>
 </Window>

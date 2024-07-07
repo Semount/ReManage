@@ -53,4 +53,10 @@
     <PackageReference Include="OxyPlot.Wpf" Version="2.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="ReManage_DB.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
