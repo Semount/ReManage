@@ -361,3 +361,29 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/D3DCompiler_47_cor3.dll
+/Microsoft.EntityFrameworkCore.Abstractions.dll
+/Microsoft.EntityFrameworkCore.dll
+/Microsoft.EntityFrameworkCore.Relational.dll
+/Microsoft.Extensions.Caching.Abstractions.dll
+/Microsoft.Extensions.Caching.Memory.dll
+/Microsoft.Extensions.Configuration.Abstractions.dll
+/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/Microsoft.Extensions.DependencyInjection.dll
+/Microsoft.Extensions.Logging.Abstractions.dll
+/Microsoft.Extensions.Logging.dll
+/Microsoft.Extensions.Options.dll
+/Microsoft.Extensions.Primitives.dll
+/Newtonsoft.Json.dll
+/NodaTime.dll
+/Npgsql.dll
+/Npgsql.EntityFrameworkCore.PostgreSQL.dll
+/Npgsql.EntityFrameworkCore.PostgreSQL.NodaTime.dll
+/Npgsql.NodaTime.dll
+/OxyPlot.dll
+/OxyPlot.Wpf.dll
+/OxyPlot.Wpf.Shared.dll
+/PenImc_cor3.dll
+/PresentationNative_cor3.dll
+/vcruntime140_cor3.dll
+/wpfgfx_cor3.dll
